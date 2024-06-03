@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Criar mapas para a Web com quarto {ojs} e geoviz</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script type="module" src="index_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="index_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução"><span class="header-section-number">1</span> Introdução</a></li>
+  <li><a href="#introdução-a-quarto" id="toc-introdução-a-quarto" class="nav-link" data-scroll-target="#introdução-a-quarto"><span class="header-section-number">2</span> Introdução a Quarto</a>
+  <ul class="collapse">
+  <li><a href="#ambiente-de-software." id="toc-ambiente-de-software." class="nav-link" data-scroll-target="#ambiente-de-software."><span class="header-section-number">2.1</span> Ambiente de software.</a></li>
+  <li><a href="#criar-um-documento-quarto" id="toc-criar-um-documento-quarto" class="nav-link" data-scroll-target="#criar-um-documento-quarto"><span class="header-section-number">2.2</span> Criar um documento Quarto</a></li>
+  <li><a href="#resumo-das-bases" id="toc-resumo-das-bases" class="nav-link" data-scroll-target="#resumo-das-bases"><span class="header-section-number">2.3</span> Resumo das bases</a></li>
+  <li><a href="#documentação-e-exemplos" id="toc-documentação-e-exemplos" class="nav-link" data-scroll-target="#documentação-e-exemplos"><span class="header-section-number">2.4</span> Documentação e exemplos</a></li>
+  </ul></li>
+  <li><a href="#os-dados" id="toc-os-dados" class="nav-link" data-scroll-target="#os-dados"><span class="header-section-number">3</span> Os dados</a>
+  <ul class="collapse">
+  <li><a href="#importação-dos-dados" id="toc-importação-dos-dados" class="nav-link" data-scroll-target="#importação-dos-dados"><span class="header-section-number">3.1</span> <strong>Importação dos dados</strong></a></li>
+  <li><a href="#visualização-de-dados-de-atributos" id="toc-visualização-de-dados-de-atributos" class="nav-link" data-scroll-target="#visualização-de-dados-de-atributos"><span class="header-section-number">3.2</span> Visualização de dados de atributos</a></li>
+  <li><a href="#visualizar-geometrias" id="toc-visualizar-geometrias" class="nav-link" data-scroll-target="#visualizar-geometrias"><span class="header-section-number">3.3</span> Visualizar Geometrias</a></li>
+  <li><a href="#personalizar-a-visualização" id="toc-personalizar-a-visualização" class="nav-link" data-scroll-target="#personalizar-a-visualização"><span class="header-section-number">3.4</span> Personalizar a visualização</a></li>
+  </ul></li>
+  <li><a href="#a-biblioteca-geoviz" id="toc-a-biblioteca-geoviz" class="nav-link" data-scroll-target="#a-biblioteca-geoviz"><span class="header-section-number">4</span> A biblioteca geoviz</a>
+  <ul class="collapse">
+  <li><a href="#documentação-e-exemplos-1" id="toc-documentação-e-exemplos-1" class="nav-link" data-scroll-target="#documentação-e-exemplos-1"><span class="header-section-number">4.1</span> Documentação e exemplos</a></li>
+  <li><a href="#os-marks" id="toc-os-marks" class="nav-link" data-scroll-target="#os-marks"><span class="header-section-number">4.2</span> <strong>Os <code>marks</code></strong></a></li>
+  <li><a href="#os-contentores" id="toc-os-contentores" class="nav-link" data-scroll-target="#os-contentores"><span class="header-section-number">4.3</span> Os Contentores</a></li>
+  <li><a href="#as-projeções" id="toc-as-projeções" class="nav-link" data-scroll-target="#as-projeções"><span class="header-section-number">4.4</span> As projeções</a></li>
+  <li><a href="#zoom-e-pan" id="toc-zoom-e-pan" class="nav-link" data-scroll-target="#zoom-e-pan"><span class="header-section-number">4.5</span> Zoom e Pan</a></li>
+  <li><a href="#grelhas-raster" id="toc-grelhas-raster" class="nav-link" data-scroll-target="#grelhas-raster"><span class="header-section-number">4.6</span> Grelhas raster</a></li>
+  <li><a href="#as-bolhas-de-informação" id="toc-as-bolhas-de-informação" class="nav-link" data-scroll-target="#as-bolhas-de-informação"><span class="header-section-number">4.7</span> As bolhas de informação</a></li>
+  </ul></li>
+  <li><a href="#cartografia-estatística" id="toc-cartografia-estatística" class="nav-link" data-scroll-target="#cartografia-estatística"><span class="header-section-number">5</span> Cartografia estatística</a>
+  <ul class="collapse">
+  <li><a href="#a-junção" id="toc-a-junção" class="nav-link" data-scroll-target="#a-junção"><span class="header-section-number">5.1</span> A junção</a></li>
+  <li><a href="#os-símbolos-proporcionais" id="toc-os-símbolos-proporcionais" class="nav-link" data-scroll-target="#os-símbolos-proporcionais"><span class="header-section-number">5.2</span> Os Símbolos proporcionais</a></li>
+  <li><a href="#mapa-coroplético" id="toc-mapa-coroplético" class="nav-link" data-scroll-target="#mapa-coroplético"><span class="header-section-number">5.3</span> Mapa coroplético</a></li>
+  <li><a href="#combinações" id="toc-combinações" class="nav-link" data-scroll-target="#combinações"><span class="header-section-number">5.4</span> Combinações</a></li>
+  <li><a href="#tudo-é-personalizávelconfigurável" id="toc-tudo-é-personalizávelconfigurável" class="nav-link" data-scroll-target="#tudo-é-personalizávelconfigurável"><span class="header-section-number">5.5</span> Tudo é personalizável/configurável</a></li>
+  </ul></li>
+  <li><a href="#criar-um-mapa-animado" id="toc-criar-um-mapa-animado" class="nav-link" data-scroll-target="#criar-um-mapa-animado"><span class="header-section-number">6</span> Criar um mapa animado</a></li>
+  <li><a href="#ir-mais-longe" id="toc-ir-mais-longe" class="nav-link" data-scroll-target="#ir-mais-longe"><span class="header-section-number">7</span> Ir mais longe</a>
+  <ul class="collapse">
+  <li><a href="#dashboards" id="toc-dashboards" class="nav-link" data-scroll-target="#dashboards"><span class="header-section-number">7.1</span> Dashboards</a></li>
+  <li><a href="#exemplos-de-mapas-realizados-com-geoviz" id="toc-exemplos-de-mapas-realizados-com-geoviz" class="nav-link" data-scroll-target="#exemplos-de-mapas-realizados-com-geoviz"><span class="header-section-number">7.2</span> <strong>Exemplos de mapas realizados com <code>geoviz</code></strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Criar mapas para a Web com <code>quarto {ojs}</code> e <code>geoviz</code></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>O objetivo desta sessão é introduzir o participante à criação de mapas interativos utilizando o <strong>Quarto</strong> e a biblioteca JavaScript <strong>geoviz</strong>.</p>
+<section id="introdução" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introdução</h1>
+<p>Antes de começar, por favor, certifique-se que leu a apresentação de introdução à Web, à sua história, às suas linguagens e ao Observable JavaScript. Ela é um pré-requisito para compreender o que vem a seguir.</p>
+</section>
+<section id="introdução-a-quarto" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Introdução a Quarto</h1>
+<section id="ambiente-de-software." class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="ambiente-de-software."><span class="header-section-number">2.1</span> Ambiente de software.</h2>
+<p>Este tutorial utiliza o software <a href="https://quarto.org">Quarto</a>. Para o instalar, pode usar o link seguinte:</p>
+<p><a href="https://quarto.org/docs/get-started" class="uri">https://quarto.org/docs/get-started</a></p>
+<p>A seguir, precisa de um ambiente de desenvolvimento para escrever o código e ver os resultados. Tem várias escolhas possíveis:</p>
+<p><img src="img/ide.png" class="img-fluid"></p>
+<p>Nesta sessão, vamos usar o RStudio, um IDE mais focado para a linguagem R mas que integra de forma muito eficiente a criação de notebooks com Quarto onde se pode integrar listagens de código JavaScript.</p>
+</section>
+<section id="criar-um-documento-quarto" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="criar-um-documento-quarto"><span class="header-section-number">2.2</span> Criar um documento Quarto</h2>
+<ul>
+<li>No seu computador, crie uma pasta <code>TP_geoviz</code> num local à sua escolha.</li>
+<li>Abra o RStudio</li>
+<li>Crie um documento <code>Quarto (ficheiro &gt; Novo ficheiro &gt; Documento Quarto</code>`</li>
+</ul>
+<p><img src="img/quarto-new-project.png" class="img-fluid"></p>
+<ul>
+<li>Clique em “Criar documento vazio” no canto inferior esquerdo.</li>
+<li>Mude para o modo de código fonte (`Source`).</li>
+</ul>
+<p><img src="img/quarto-new.png" class="img-fluid"></p>
+<p>Irá obter um ficheiro com as seguintes linhas:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Untitled"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span><span class="at"> html</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">editor</span><span class="kw">:</span><span class="at"> visual</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A informação delimitada pelos simbolos `—` correspondem a especificação <strong>yaml</strong> do ficheiro, uma linguagem de configuração.</p>
+<p>Selecionar um título Guardar o ficheiro <strong>index.qmd</strong> na pasta <strong>TP_geoviz</strong>. Nesta pasta, pode criar também uma subdiretoria de <strong>dados</strong> para armazenar os dados.</p>
+<p><img src="img/quarto-project-structure.png" class="img-fluid"></p>
+</section>
+<section id="resumo-das-bases" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="resumo-das-bases"><span class="header-section-number">2.3</span> Resumo das bases</h2>
+<p>Neste tutorial, vamos criar mapas utilizando <strong>Observable JavaScript</strong> (ou <strong><em>ojs</em></strong>). Lembre-se que <strong><em>ojs</em></strong> é um conjunto de melhorias feitas no JavaScript com o objetivo de torná-lo uma linguagem dedicada à visualização de dados para a web. Essa linguagem está totalmente integrada em <strong>Quarto</strong>.</p>
+<p>As características do <strong><em>ojs</em></strong> são as seguintes:</p>
+<ul>
+<li>É JavaScript + bibliotecas pré-carregadas como Plot &amp; d3js 📊</li>
+<li>Tudo é reativo 🔥 e reproduzido em tempo real</li>
+<li>A ordem das células não importa 🤯</li>
+<li>Cada início de linha identifica uma célula <strong><em>ojs</em></strong>. O nome destas células deve ser único para todo o documento.</li>
+</ul>
+<p>Em Quarto, todas as instruções a seguir são escritas em pedaços de ojs</p>
+<p>```{ojs}</p>
+<p>```</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os <em>chunks</em> e as células são dois conceitos diferentes.</p>
+</div>
+</div>
+<p>Um <em>chunk</em> que contém uma única célula</p>
+<pre class="shell"><code>sum = 10 + 10</code></pre>
+<p>Um <em>chunk</em> que contém três células</p>
+<pre class="shell"><code>a = 10
+b = 20
+c = a * b</code></pre>
+<p>Um <em>chunk</em> que contém uma única célula</p>
+<pre class="shell"><code>{
+  // código JavaScript
+  let a = 10
+  let b = 20
+  return a * b
+}</code></pre>
+<p>Para cada bloco, pode utilizar <code>echo</code> para definir se pretende ou não que o código seja apresentado no seu bloco de notas final. Com <code>eval</code>, pode escolher se o código deve ou não ser executado.</p>
+<p>```{ojs}</p>
+<p>/ / | echo: false</p>
+<p>/ / | eval: true</p>
+<p>```</p>
+<p>O código em linha também permite a execução de código dentro do texto no formato <em>markdown</em>. A sintaxe do código em linha é semelhante à dos blocos de código, exceto que é utilizado um único traço (`) em vez de três traços (```).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>raio = 5</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>O raio da circunferência é igual a **``{ojs} radius``**.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>resulta nisto :</p>
+<pre><code>O raio do círculo é igual a 5</code></pre>
+<p>Para gerar o documento, clique no botão <em>Renderizar</em> ou utilize o atalho de teclado <strong>Ctrl+Shift+K</strong>.</p>
+<p>Depois de ter clicado em *Renderizar*, a página Web é apresentada no painel Visualizador e é criada uma pasta <strong>Docs</strong>. Ela contém o site gerado.</p>
+<p>Também pode clicar no ícone <em>Ver numa nova janela</em> para ver o documento no seu navegador Web habitual.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/webview.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="documentação-e-exemplos" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="documentação-e-exemplos"><span class="header-section-number">2.4</span> Documentação e exemplos</h2>
+<p>Ao longo deste caderno, pode consultar a documentação clicando neste ícone.</p>
+<p><img src="img/icone-doc.png" class="img-fluid"></p>
+<p>Também pode aceder a exemplos pedagógicos e demonstrações online clicando neste ícone.</p>
+<p><img src="img/icone-ojs.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="os-dados" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Os dados</h1>
+<p>O conjunto de dados utilizado provém do <a href="https://data.worldbank.org/indicator">Banco Mundial</a>. Os dados foram formatados <a href="https://observablehq.com/@neocartocnrs/world-bank-data">aqui</a>.</p>
+<p>Descarregue os dados e coloque o ficheiro zip no seu diretório de dados.</p>
+<p><img src="img/icon-download.png" class="img-fluid" width="50"></p>
+<section id="importação-dos-dados" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="importação-dos-dados"><span class="header-section-number">3.1</span> <strong>Importação dos dados</strong></h2>
+<p>Em {ojs}, importamos os dados com a instrução <code>FileAttachment()</code><a href="https://github.com/observablehq/stdlib#file-attachments"><img src="img/icone-doc.png" class="img-fluid"></a></p>
+<p>Uma vez que os dados estão no formato .zip, escrevemos :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" data-startfrom="168" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 167;"><span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>worldbank <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/worldbank.zip"</span>)<span class="op">.</span><span class="fu">zip</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>Este ficheiro zip contém 3 ficheiros.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" data-startfrom="174" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 173;"><span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>worldbank<span class="op">.</span><span class="at">filenames</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Existem várias funções disponíveis para interpretar formatos de dados. A função <code>.csv()</code> é utilizada para importar dados <strong><em>csv</em></strong>. A função <code>.xlsx()</code> é utilizada para importar <strong><em>folhas de cálculo Excel</em></strong>. A função <code>.json()</code> é utilizada para importar dados em formato <strong><em>JSO</em></strong>N. Aqui, vamos criar 3 conjuntos de dados distintos.</p>
+<ul>
+<li>Os dados</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" data-startfrom="182" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 181;"><span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> worldbank<span class="op">.</span><span class="fu">file</span>(<span class="st">"data.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<ul>
+<li>Os metadados</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" data-startfrom="188" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 187;"><span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> worldbank<span class="op">.</span><span class="fu">file</span>(<span class="st">"metadata.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<ul>
+<li>As bases dos mapas (países do mundo)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" data-startfrom="194" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 193;"><span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a>world <span class="op">=</span> worldbank<span class="op">.</span><span class="fu">file</span>(<span class="st">"world.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</section>
+<section id="visualização-de-dados-de-atributos" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="visualização-de-dados-de-atributos"><span class="header-section-number">3.2</span> Visualização de dados de atributos</h2>
+<p>Para visualizar uma tabela de dados, pode utilizar a instrução <code>Inputs.table()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" data-startfrom="202" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 201;"><span id="cb13-202"><a href="#cb13-202" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" data-startfrom="206" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 205;"><span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(metadata)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Esta visualização de tabela também pode ser combinada com a função <code>Inputs.search()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" data-startfrom="213" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 212;"><span id="cb15-213"><a href="#cb15-213" aria-hidden="true" tabindex="-1"></a>viewof search <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">search</span>(data<span class="op">,</span> { <span class="dt">query</span><span class="op">:</span> <span class="st">"Portugal"</span> })</span>
+<span id="cb15-214"><a href="#cb15-214" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(search)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-8-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-8-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>É possível combinar instruções em <strong><em>R</em></strong> e instruções em <strong><em>ojs</em></strong> utilizando a instrução <code>ojs_define()</code>.</p>
+<p>Por exemplo :</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chunk r</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>datafromr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/data.csv"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ojs_define</span>(<span class="at">ojsdata =</span> datafromr)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">// chunk ojs</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(<span class="fu">transpose</span>(ojsdata))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Também funciona com objectos espaciais. Mas para isso, é preciso fazer as coisas de forma um pouco diferente.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chunk r</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"sf"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"geojsonsf"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>geomfromr <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"data/world.gpkg"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ojs_define</span>(<span class="at">ojsgeom =</span> <span class="fu">sf_geojson</span>(geomfromr))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="ojs"><code>// chunk ojs
+JSON.parse(ojsgeom)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizar-geometrias" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="visualizar-geometrias"><span class="header-section-number">3.3</span> Visualizar Geometrias</h2>
+<p>O mapa de fundo está no formato geoJSON</p>
+<p>Para o visualizar, é necessário importar uma biblioteca de mapas. Neste caso, escolhemos a biblioteca geoviz</p>
+<p><a href="https://riatelab.github.io/geoviz/"><img src="img/geoviz.jpeg" class="img-fluid" width="300"></a></p>
+<p>É importada utilizando a instrução <code>require()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" data-startfrom="259" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 258;"><span id="cb20-259"><a href="#cb20-259" aria-hidden="true" tabindex="-1"></a>viz <span class="op">=</span> <span class="pp">require</span>(<span class="st">"geoviz@0.6.1"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>Para ver simplesmente as geometrias com uma cor aleatória, digite :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" data-startfrom="265" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 264;"><span id="cb21-265"><a href="#cb21-265" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span> world})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>O mapa é um pouco grande. Podemos redimensioná-lo utilizando o parâmetro <code>svg_width</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" data-startfrom="271" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 270;"><span id="cb22-271"><a href="#cb22-271" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span> <span class="dv">790</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O atributo <code>svg_width</code> modifica os parâmetros do contentor SVG que contém a camada. Veremos mais tarde como funcionam os contentores.</p>
+</div>
+</div>
+</section>
+<section id="personalizar-a-visualização" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="personalizar-a-visualização"><span class="header-section-number">3.4</span> Personalizar a visualização</h2>
+<p>A biblioteca <strong><em>geoviz</em></strong> não é apenas um visualizador de camadas SIG. É uma ferramenta para criar mapas vectoriais. Com o geoviz, os mapas são desenhados em formato SVG. Por conseguinte, é possível utilizar todos os atributos SVG para modificar o mapa. Há apenas uma diferença. O JavaScript não suporta nomes de variáveis com hífen. Por isso, é habitual converter este hífen em camelCase. Por exemplo: <code>stroke-width</code> dará <code>strokeWidth</code>.</p>
+<p>Pode tentar :</p>
+<ul>
+<li><code>fill</code>: cor de fundo</li>
+<li><code>stroke</code>: cor do contorno</li>
+<li><code>strokeWidth</code>: espessura da linha</li>
+<li><code>fillOpacity</code>: opacidade do fundo</li>
+<li><code>strokeOpacity</code>: opacidade do contorno</li>
+<li><code>strokeDashArray</code>: linhas pontilhadas (por exemplo, [2,3])</li>
+</ul>
+<p>Em suma, pode personalizar tudo tal como num mapa do <strong><em>Inkscape</em></strong> ou do <em><code>Illustrator</code></em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" data-startfrom="296" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 295;"><span id="cb23-296"><a href="#cb23-296" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#d66bb3"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span><span class="fl">0.5</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Lembre-se que, com o Observable, estamos num ambiente interativo e reativo. Assim, podemos criar interacções para personalizar o mapa.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" data-startfrom="303" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 302;"><span id="cb24-303"><a href="#cb24-303" aria-hidden="true" tabindex="-1"></a>viewof colorfill <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Fond"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"#4682b4"</span>})</span>
+<span id="cb24-304"><a href="#cb24-304" aria-hidden="true" tabindex="-1"></a>viewof colorstroke <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>([<span class="st">"red"</span><span class="op">,</span> <span class="st">"green"</span><span class="op">,</span> <span class="st">"blue"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Contour"</span>})</span>
+<span id="cb24-305"><a href="#cb24-305" aria-hidden="true" tabindex="-1"></a>viewof thickness <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">10</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Epaisseur"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span><span class="dv">1</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" data-startfrom="308" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 307;"><span id="cb25-308"><a href="#cb25-308" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span><span class="dv">790</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> colorfill<span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> colorstroke<span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> thickness})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-14" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="a-biblioteca-geoviz" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> A biblioteca geoviz</h1>
+<section id="documentação-e-exemplos-1" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="documentação-e-exemplos-1"><span class="header-section-number">4.1</span> Documentação e exemplos</h2>
+<p>A documentação do <code>geoviz</code> está disponível no seguinte endereço: <a href="https://riatelab.github.io/geoviz/">riatelab.github.io/geoviz</a>. Clique nesta hiperligação e guarde a página para referência futura.</p>
+<p><a href="https://riatelab.github.io/geoviz/"><img src="img/geoviz2.png" class="img-fluid"></a></p>
+<p>Para o ajudar a compreender o funcionamento desta biblioteca, estão também disponíveis vários exemplos em direto na plataforma do bloco de notas Observable.</p>
+<p>Hello geoviz</p>
+<p>Map container</p>
+<p>Path mark</p>
+<p>Circle mark</p>
+<p>Half-circle mark</p>
+<p>Spike mark</p>
+<p>Square mark</p>
+<p>Prop symbols</p>
+<p>Text mark</p>
+<p>Tile mark</p>
+<p>Choropleth</p>
+<p>Typolgy</p>
+<p>Tooltip</p>
+<p>Legends</p>
+<p>SVG filters and clip</p>
+<p>Insets</p>
+<p>Layout marks</p>
+<p>Pan and zoom</p>
+<p>Interactivity</p>
+<p>Handle geometries</p>
+<p>Draw function</p>
+</section>
+<section id="os-marks" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="os-marks"><span class="header-section-number">4.2</span> <strong>Os <code>marks</code></strong></h2>
+<p>À semelhança da instrução <code>path</code>, a biblioteca <strong><em>geoviz</em></strong> fornece uma série de <strong><code>marks</code></strong> para criar um mapa.</p>
+<p>Por exemplo :</p>
+<ul>
+<li><p><code>circle</code> : cículos</p></li>
+<li><p><code>square</code> : quadrados [</p></li>
+<li><p><code>halfcircle</code> : meios círculos</p></li>
+<li><p><code>spike</code> : pontas</p></li>
+<li><p><code>graticule</code> : linhas de latitude e longitude</p></li>
+<li><p><code>outline</code> : espaço terrestre numa determinada projeção</p></li>
+<li><p><code>tile</code> : mosaicos raster</p></li>
+<li><p><code>header</code> :título do mapa</p></li>
+<li><p><code>footer</code> : rodapé (fontes)</p></li>
+<li><p><code>north</code>: seta do norte</p></li>
+<li><p><code>scalebar</code> : barra de escala</p></li>
+<li><p><code>text</code> : textos et rótulos</p></li>
+</ul>
+<p>É possível chamar diretamente estes <code>marks</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" data-startfrom="396" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 395;"><span id="cb26-396"><a href="#cb26-396" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">circle</span>({ <span class="dt">r</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#38896F"</span> })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" data-startfrom="400" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 399;"><span id="cb27-400"><a href="#cb27-400" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">square</span>({ <span class="dt">side</span><span class="op">:</span> <span class="dv">60</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">angle</span><span class="op">:</span> <span class="dv">45</span> })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-16" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Se utilizarmos o atributo de dados, as marcas são colocadas no centro das unidades geográficas. Por exemplo</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28" data-startfrom="406" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 405;"><span id="cb28-406"><a href="#cb28-406" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">square</span>({ <span class="dt">data</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">side</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">angle</span><span class="op">:</span> <span class="dv">45</span> })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-17" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" data-startfrom="410" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 409;"><span id="cb29-410"><a href="#cb29-410" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">text</span>({ <span class="dt">data</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span> <span class="dv">785</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"ISO3"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#38896F"</span> })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-18" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Mas, na maioria das vezes, estas marcas serão utilizadas dentro de contentores nos quais podem ser sobrepostas.</p>
+</section>
+<section id="os-contentores" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="os-contentores"><span class="header-section-number">4.3</span> Os Contentores</h2>
+<p>No geoviz, para combinar diferentes camadas num mapa, é necessário criar um contentor SVG. Este contentor é criado utilizando a instrução <code>create()</code>. Pode então ser apresentado utilizando a função <code>render()</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para criar o mapa numa única célula, coloque as instruções entre chavetas</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30" data-startfrom="426" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 425;"><span id="cb30-426"><a href="#cb30-426" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb30-427"><a href="#cb30-427" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>()</span>
+<span id="cb30-428"><a href="#cb30-428" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world})</span>
+<span id="cb30-429"><a href="#cb30-429" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb30-430"><a href="#cb30-430" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-19" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Para funcionar corretamente, o contentor necessita que defina uma projeção e/ou um domínio.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note que, a partir de agora, a função create() será utilizada para definir o tamanho do mapa.</p>
+</div>
+</div>
+<p>Vamos recomeçar:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" data-startfrom="442" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 441;"><span id="cb31-442"><a href="#cb31-442" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb31-443"><a href="#cb31-443" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">domain</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">790</span>})</span>
+<span id="cb31-444"><a href="#cb31-444" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span>})</span>
+<span id="cb31-445"><a href="#cb31-445" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb31-446"><a href="#cb31-446" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-20" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="as-projeções" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="as-projeções"><span class="header-section-number">4.4</span> As projeções</h2>
+<p>No ecossistema d3js e geoviz, utilizamos funções de projeção muito específicas dedicadas à representação de dados, divididas em 3 bibliotecas: d3-geo , d3-geo-projection e d3-geo-polygon .</p>
+<p>São carregados da seguinte forma:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32" data-startfrom="456" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 455;"><span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">"d3"</span><span class="op">,</span> <span class="st">"d3-geo"</span><span class="op">,</span> <span class="st">"d3-geo-projection"</span><span class="op">,</span> <span class="st">"d3-geo-polygon"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-21" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>O princípio é que a entrada é sempre uma geometria em formato lat/lon, que é projetada em tempo real quando é apresentada.</p>
+<p>Por exemplo :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33" data-startfrom="464" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 463;"><span id="cb33-464"><a href="#cb33-464" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb33-465"><a href="#cb33-465" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">domain</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoNaturalEarth1</span>()})</span>
+<span id="cb33-466"><a href="#cb33-466" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span>})</span>
+<span id="cb33-467"><a href="#cb33-467" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb33-468"><a href="#cb33-468" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-22" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note que também poderia ter escrito simplesmente :</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>viz<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">svg_width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">svg_projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoNaturalEarth1</span>()})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>Com os contentores, pode-se agora empilhar camadas. Ao combinar marcas e atributos SVG, pode-se criar modelos cartográficos muito bonitos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35" data-startfrom="482" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 481;"><span id="cb35-482"><a href="#cb35-482" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb35-483"><a href="#cb35-483" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoAitoff</span>() })</span>
+<span id="cb35-484"><a href="#cb35-484" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>()</span>
+<span id="cb35-485"><a href="#cb35-485" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">40</span>})</span>
+<span id="cb35-486"><a href="#cb35-486" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.3</span>})</span>
+<span id="cb35-487"><a href="#cb35-487" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">header</span>({<span class="dt">text</span><span class="op">:</span> <span class="st">"Hello World"</span>})</span>
+<span id="cb35-488"><a href="#cb35-488" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb35-489"><a href="#cb35-489" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-23" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Graças aos Inputs, pode divertir-se a visualizar diferentes projecções.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36" data-startfrom="495" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 494;"><span id="cb36-495"><a href="#cb36-495" aria-hidden="true" tabindex="-1"></a>projections <span class="op">=</span> [</span>
+<span id="cb36-496"><a href="#cb36-496" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">name</span><span class="op">:</span> <span class="st">"Interrupted Sinusoidal"</span><span class="op">,</span> <span class="dt">proj</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoInterruptedSinusoidal</span>() }<span class="op">,</span></span>
+<span id="cb36-497"><a href="#cb36-497" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">name</span><span class="op">:</span> <span class="st">"Gingery"</span><span class="op">,</span> <span class="dt">proj</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoGingery</span>() }<span class="op">,</span></span>
+<span id="cb36-498"><a href="#cb36-498" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">name</span><span class="op">:</span> <span class="st">"Baker"</span><span class="op">,</span> <span class="dt">proj</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoBaker</span>() }<span class="op">,</span></span>
+<span id="cb36-499"><a href="#cb36-499" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">name</span><span class="op">:</span> <span class="st">"PolyhedralWaterman"</span><span class="op">,</span> <span class="dt">proj</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoPolyhedralWaterman</span>()  }<span class="op">,</span>     </span>
+<span id="cb36-500"><a href="#cb36-500" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-24" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37" data-startfrom="504" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 503;"><span id="cb37-504"><a href="#cb37-504" aria-hidden="true" tabindex="-1"></a>viewof projection <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(projections<span class="op">,</span> {</span>
+<span id="cb37-505"><a href="#cb37-505" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"Projection"</span><span class="op">,</span></span>
+<span id="cb37-506"><a href="#cb37-506" aria-hidden="true" tabindex="-1"></a>  <span class="dt">format</span><span class="op">:</span> (x) <span class="kw">=&gt;</span> x<span class="op">.</span><span class="at">name</span></span>
+<span id="cb37-507"><a href="#cb37-507" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-25" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" data-startfrom="511" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 510;"><span id="cb38-511"><a href="#cb38-511" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb38-512"><a href="#cb38-512" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> projection<span class="op">.</span><span class="at">proj</span>})</span>
+<span id="cb38-513"><a href="#cb38-513" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span> <span class="op">:</span><span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span><span class="kw">null</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span><span class="dv">40</span><span class="op">,</span> <span class="dt">clipPath</span> <span class="op">:</span> svg<span class="op">.</span><span class="at">effect</span><span class="op">.</span><span class="fu">clipPath</span>()})</span>
+<span id="cb38-514"><a href="#cb38-514" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span>})</span>
+<span id="cb38-515"><a href="#cb38-515" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>({<span class="dt">stroke</span> <span class="op">:</span><span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"none"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
+<span id="cb38-516"><a href="#cb38-516" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb38-517"><a href="#cb38-517" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-26" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="zoom-e-pan" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="zoom-e-pan"><span class="header-section-number">4.5</span> Zoom e Pan</h2>
+<p>No contentor, utilizando o atributo <code>zoomable</code>, pode-se também especificar se se pretende que o mapa seja passível de zoom.</p>
+<p>Por exemplo, o atributo :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39" data-startfrom="527" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 526;"><span id="cb39-527"><a href="#cb39-527" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb39-528"><a href="#cb39-528" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoBertin1953</span>()<span class="op">,</span> <span class="dt">zoomable</span><span class="op">:</span><span class="kw">true</span> })</span>
+<span id="cb39-529"><a href="#cb39-529" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>()</span>
+<span id="cb39-530"><a href="#cb39-530" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span>})</span>
+<span id="cb39-531"><a href="#cb39-531" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.3</span>})</span>
+<span id="cb39-532"><a href="#cb39-532" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb39-533"><a href="#cb39-533" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-27" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Com uma projeção ortográfica e o atributo <code>outzoomable = “versor”</code>, pode-se também utilizar o centro de projeção para rodar o globo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40" data-startfrom="539" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 538;"><span id="cb40-539"><a href="#cb40-539" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb40-540"><a href="#cb40-540" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoOrthographic</span>()<span class="op">.</span><span class="fu">rotate</span>([<span class="op">-</span><span class="dv">30</span><span class="op">,</span> <span class="op">-</span><span class="dv">30</span>])<span class="op">,</span> <span class="dt">zoomable</span><span class="op">:</span><span class="st">"versor"</span> })</span>
+<span id="cb40-541"><a href="#cb40-541" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>()</span>
+<span id="cb40-542"><a href="#cb40-542" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span>})</span>
+<span id="cb40-543"><a href="#cb40-543" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.3</span>})</span>
+<span id="cb40-544"><a href="#cb40-544" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb40-545"><a href="#cb40-545" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-28" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Note que o <code>versor</code> pode ser aplicado a qualquer projeção, o que pode ser confuso, mas também é muito útil se quiser realmente compreender como funcionam as projecções cartográficas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41" data-startfrom="551" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 550;"><span id="cb41-551"><a href="#cb41-551" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb41-552"><a href="#cb41-552" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoEckert3</span>()<span class="op">,</span> <span class="dt">zoomable</span><span class="op">:</span><span class="st">"versor"</span> })</span>
+<span id="cb41-553"><a href="#cb41-553" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>()</span>
+<span id="cb41-554"><a href="#cb41-554" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span>})</span>
+<span id="cb41-555"><a href="#cb41-555" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.3</span>})</span>
+<span id="cb41-556"><a href="#cb41-556" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb41-557"><a href="#cb41-557" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="grelhas-raster" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="grelhas-raster"><span class="header-section-number">4.6</span> Grelhas raster</h2>
+<p>Tal como as outras marcas, as grelhas raster são igualmente passíveis de zoom.</p>
+<p>Os estilos disponíveis por defeito são : “openstreetmap”, “opentopomap”, “worldterrain”, “worldimagery”, “worldStreet”, “worldphysical”, “shadedrelief”, “stamenterrain”, “cartodbvoyager”, “stamentoner”, “stamentonerbackground”, “stamentonerlite”, “stamenwatercolor”, “hillshade”, “worldocean”, “natgeo” e “worldterrain”</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para utilizar o <em>mark</em> <code>tile</code>, é necessário utilizar a projeção “mercator”.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42" data-startfrom="571" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 570;"><span id="cb42-571"><a href="#cb42-571" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb42-572"><a href="#cb42-572" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> <span class="st">"mercator"</span><span class="op">,</span> <span class="dt">zoomable</span><span class="op">:</span><span class="kw">true</span> })</span>
+<span id="cb42-573"><a href="#cb42-573" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">tile</span>({<span class="dt">url</span><span class="op">:</span><span class="st">"natgeo"</span>})</span>
+<span id="cb42-574"><a href="#cb42-574" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"none"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span><span class="st">"white"</span>})</span>
+<span id="cb42-575"><a href="#cb42-575" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb42-576"><a href="#cb42-576" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-30" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="as-bolhas-de-informação" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="as-bolhas-de-informação"><span class="header-section-number">4.7</span> As bolhas de informação</h2>
+<p>Com o geoviz, pode adicionar bolhas de informação a qualquer objeto. Se utilizar <code>tip: true</code>, todos os campos são apresentados.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43" data-startfrom="584" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 583;"><span id="cb43-584"><a href="#cb43-584" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb43-585"><a href="#cb43-585" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoNaturalEarth1</span>()})</span>
+<span id="cb43-586"><a href="#cb43-586" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span><span class="fl">0.3</span><span class="op">,</span> <span class="dt">tip</span><span class="op">:</span><span class="kw">true</span>})</span>
+<span id="cb43-587"><a href="#cb43-587" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb43-588"><a href="#cb43-588" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-31" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Mas tudo pode ser personalizado:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44" data-startfrom="594" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 593;"><span id="cb44-594"><a href="#cb44-594" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb44-595"><a href="#cb44-595" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoNaturalEarth1</span>()})</span>
+<span id="cb44-596"><a href="#cb44-596" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">data</span><span class="op">:</span>world<span class="op">,</span> <span class="dt">fill</span> <span class="op">:</span><span class="st">"#38896F"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span><span class="fl">0.3</span><span class="op">,</span> <span class="dt">tip</span><span class="op">:</span> <span class="vs">`Este país é $NAMEfr e o seu código é : $ISO3`</span>})</span>
+<span id="cb44-597"><a href="#cb44-597" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb44-598"><a href="#cb44-598" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-32" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="cartografia-estatística" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Cartografia estatística</h1>
+<section id="a-junção" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="a-junção"><span class="header-section-number">5.1</span> A junção</h2>
+<p>A primeira coisa a fazer aqui é realizar uma junção entre as geometrias e os dados estatísticos importados no início deste caderno a partir de um ficheiro zip.</p>
+<p>Vejamos novamente a tabela de dados.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45" data-startfrom="610" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 609;"><span id="cb45-610"><a href="#cb45-610" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-33" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>A tabela contém informações para várias datas. Por conseguinte, o mesmo identificador (<code>id</code>) aparece várias vezes na tabela de dados. O primeiro passo é selecionar um ano.</p>
+<p>Em JavaScript, utilizamos a instrução de filtro.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46" data-startfrom="619" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 618;"><span id="cb46-619"><a href="#cb46-619" aria-hidden="true" tabindex="-1"></a>data2020 <span class="op">=</span> data<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">year</span> <span class="op">==</span> <span class="dv">2020</span>)</span>
+<span id="cb46-620"><a href="#cb46-620" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(data2020)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-34-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-34-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Manipular uma matriz de dados em JavaScript quando se está habituado a fazê-lo em R pode ser confuso. Mas é possível usar a biblioteca arquero, que é muito semelhante ao <code>dplyr</code>.</p>
+</div>
+</div>
+<p>Para efetuar a junção, utilizamos a instrução <code>viz.tool.merge()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47" data-startfrom="629" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 628;"><span id="cb47-629"><a href="#cb47-629" aria-hidden="true" tabindex="-1"></a>jointure <span class="op">=</span> viz<span class="op">.</span><span class="at">tool</span><span class="op">.</span><span class="fu">merge</span>({<span class="dt">geom</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">geom_id</span><span class="op">:</span> <span class="st">"ISO3"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> data2020<span class="op">,</span> <span class="dt">data_id</span><span class="op">:</span><span class="st">"id"</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-35" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>A função devolve o resultado da junção, bem como um diagnóstico para avaliar a qualidade da junção.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48" data-startfrom="635" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 634;"><span id="cb48-635"><a href="#cb48-635" aria-hidden="true" tabindex="-1"></a>jointure</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-36" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>O novo mapa de fundo é, por conseguinte, :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49" data-startfrom="641" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 640;"><span id="cb49-641"><a href="#cb49-641" aria-hidden="true" tabindex="-1"></a>world2020 <span class="op">=</span> jointure<span class="op">.</span><span class="at">featureCollection</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-37" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</section>
+<section id="os-símbolos-proporcionais" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="os-símbolos-proporcionais"><span class="header-section-number">5.2</span> Os Símbolos proporcionais</h2>
+<p>Para representar dados quantitativos absolutos, utilizamos símbolos na cartografia que variam proporcionalmente. Para o fazer, utilize a função <code>viz.plot()</code> com <code>type: “prop”</code> . É um pouco como usar <code>r::mapsf</code>.</p>
+<p>O mapa pode ser desenhado da seguinte forma :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50" data-startfrom="651" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 650;"><span id="cb50-651"><a href="#cb50-651" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb50-652"><a href="#cb50-652" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> world2020})</span>
+<span id="cb50-653"><a href="#cb50-653" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"base"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#CCC"</span>})</span>
+<span id="cb50-654"><a href="#cb50-654" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"prop"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="kw">var</span><span class="op">:</span> <span class="st">"pop"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"#d47988"</span><span class="op">,</span> <span class="dt">leg_pos</span><span class="op">:</span>[<span class="dv">10</span><span class="op">,</span> <span class="dv">200</span>]})</span>
+<span id="cb50-655"><a href="#cb50-655" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb50-656"><a href="#cb50-656" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-38" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>5.3. Tipologias Para criar tipologias, utilizamos também a função <code>plot()</code> com <code>type: "typo"</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51" data-startfrom="662" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 661;"><span id="cb51-662"><a href="#cb51-662" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb51-663"><a href="#cb51-663" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> world2020})</span>
+<span id="cb51-664"><a href="#cb51-664" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"typo"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="kw">var</span><span class="op">:</span> <span class="st">"region"</span><span class="op">,</span> <span class="dt">leg_pos</span><span class="op">:</span>[<span class="dv">10</span><span class="op">,</span> <span class="dv">100</span>]})</span>
+<span id="cb51-665"><a href="#cb51-665" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb51-666"><a href="#cb51-666" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-39" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Estão disponíveis várias paletas de cores em dicopal.</p>
+</section>
+<section id="mapa-coroplético" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="mapa-coroplético"><span class="header-section-number">5.3</span> Mapa coroplético</h2>
+<p>Para criar um mapa coroplético, utilize o comando <code>type: "choro"</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52" data-startfrom="676" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 675;"><span id="cb52-676"><a href="#cb52-676" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb52-677"><a href="#cb52-677" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> world2020})</span>
+<span id="cb52-678"><a href="#cb52-678" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"choro"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="kw">var</span><span class="op">:</span> <span class="st">"gdppc"</span><span class="op">,</span> <span class="dt">leg_pos</span><span class="op">:</span>[<span class="dv">10</span><span class="op">,</span> <span class="dv">100</span>]})</span>
+<span id="cb52-679"><a href="#cb52-679" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb52-680"><a href="#cb52-680" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-40" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Com <code>method</code>, pode alterar o método de discretização: “quantile”, “q6”, “equal”, “jenks”, “msd”, “geometric”, “headtail”, “pretty”, “arithmetic” ou “nestedmeans”.</p>
+<p>Com <code>nb</code>, pode alterar o número de classes.</p>
+<p>Utilize <code>colors</code> para alterar a paleta.</p>
+</section>
+<section id="combinações" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="combinações"><span class="header-section-number">5.4</span> Combinações</h2>
+<p>Com os tipos “propchoro” e “proptypo”, é possível criar combinações gráficas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53" data-startfrom="694" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 693;"><span id="cb53-694"><a href="#cb53-694" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb53-695"><a href="#cb53-695" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span> <span class="dv">790</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> world2020})</span>
+<span id="cb53-696"><a href="#cb53-696" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span> <span class="st">"propchoro"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="dt">var1</span><span class="op">:</span> <span class="st">"pop"</span><span class="op">,</span> <span class="dt">var2</span><span class="op">:</span> <span class="st">"gdppc"</span>})</span>
+<span id="cb53-697"><a href="#cb53-697" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb53-698"><a href="#cb53-698" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-41" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="tudo-é-personalizávelconfigurável" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="tudo-é-personalizávelconfigurável"><span class="header-section-number">5.5</span> Tudo é personalizável/configurável</h2>
+<p>Lembre-se também que estamos num ambiente reativo e que pode propor interacções para modificar o mapa.</p>
+<p>Por exemplo, é possível</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54" data-startfrom="709" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 708;"><span id="cb54-709"><a href="#cb54-709" aria-hidden="true" tabindex="-1"></a>viewof title <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">textarea</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Título do mapa"</span><span class="op">,</span> <span class="dt">placeholder</span><span class="op">:</span> <span class="st">"Título..."</span>})</span>
+<span id="cb54-710"><a href="#cb54-710" aria-hidden="true" tabindex="-1"></a>viewof k <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">70</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Raio do maior cícrculo"</span>})</span>
+<span id="cb54-711"><a href="#cb54-711" aria-hidden="true" tabindex="-1"></a>viewof toggle <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Afastar os círculos ?"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="kw">false</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-42-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-42-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-42-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55" data-startfrom="714" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 713;"><span id="cb55-714"><a href="#cb55-714" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb55-715"><a href="#cb55-715" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span><span class="dv">790</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> world2020})</span>
+<span id="cb55-716"><a href="#cb55-716" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span> world2020<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"#CCC"</span>})</span>
+<span id="cb55-717"><a href="#cb55-717" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span><span class="st">"prop"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="kw">var</span><span class="op">:</span> <span class="st">"pop"</span><span class="op">,</span> <span class="dt">k</span><span class="op">:</span>k<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"#e02d51"</span><span class="op">,</span> <span class="dt">dodge</span><span class="op">:</span> toggle<span class="op">,</span> <span class="dt">leg_pos</span><span class="op">:</span>[<span class="dv">10</span><span class="op">,</span> <span class="dv">200</span>] })</span>
+<span id="cb55-718"><a href="#cb55-718" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">header</span>({<span class="dt">text</span><span class="op">:</span> title })</span>
+<span id="cb55-719"><a href="#cb55-719" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb55-720"><a href="#cb55-720" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-43" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Tudo é completamente personalizável.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56" data-startfrom="726" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 725;"><span id="cb56-726"><a href="#cb56-726" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb56-727"><a href="#cb56-727" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({ <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoOrthographic</span>()<span class="op">.</span><span class="fu">rotate</span>([<span class="op">-</span><span class="dv">50</span><span class="op">,-</span><span class="dv">50</span>])<span class="op">,</span> <span class="dt">zoomable</span><span class="op">:</span> <span class="st">"versor"</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span><span class="dv">790</span> })<span class="op">;</span></span>
+<span id="cb56-728"><a href="#cb56-728" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">plot</span>({ <span class="dt">type</span><span class="op">:</span> <span class="st">"outline"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> svg<span class="op">.</span><span class="at">effect</span><span class="op">.</span><span class="fu">radialGradient</span>() })<span class="op">;</span></span>
+<span id="cb56-729"><a href="#cb56-729" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb56-730"><a href="#cb56-730" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> <span class="st">"graticule"</span><span class="op">,</span></span>
+<span id="cb56-731"><a href="#cb56-731" aria-hidden="true" tabindex="-1"></a>    <span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span><span class="op">,</span></span>
+<span id="cb56-732"><a href="#cb56-732" aria-hidden="true" tabindex="-1"></a>    <span class="dt">step</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span></span>
+<span id="cb56-733"><a href="#cb56-733" aria-hidden="true" tabindex="-1"></a>    <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb56-734"><a href="#cb56-734" aria-hidden="true" tabindex="-1"></a>    <span class="dt">strokeOpacity</span><span class="op">:</span> <span class="fl">0.3</span></span>
+<span id="cb56-735"><a href="#cb56-735" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb56-736"><a href="#cb56-736" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">plot</span>({ <span class="dt">type</span><span class="op">:</span> <span class="st">"typo"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span> <span class="kw">var</span><span class="op">:</span> <span class="st">"region"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"none"</span><span class="op">,</span> <span class="dt">legend</span><span class="op">:</span> <span class="kw">false</span> })<span class="op">;</span></span>
+<span id="cb56-737"><a href="#cb56-737" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb56-738"><a href="#cb56-738" aria-hidden="true" tabindex="-1"></a>    <span class="dt">type</span><span class="op">:</span> <span class="st">"prop"</span><span class="op">,</span></span>
+<span id="cb56-739"><a href="#cb56-739" aria-hidden="true" tabindex="-1"></a>    <span class="dt">symbol</span><span class="op">:</span> <span class="st">"square"</span><span class="op">,</span></span>
+<span id="cb56-740"><a href="#cb56-740" aria-hidden="true" tabindex="-1"></a>    <span class="dt">data</span><span class="op">:</span> world2020<span class="op">,</span></span>
+<span id="cb56-741"><a href="#cb56-741" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span><span class="op">:</span> <span class="st">"pop"</span><span class="op">,</span></span>
+<span id="cb56-742"><a href="#cb56-742" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fill</span><span class="op">:</span> <span class="st">"red"</span><span class="op">,</span></span>
+<span id="cb56-743"><a href="#cb56-743" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.8</span><span class="op">,</span></span>
+<span id="cb56-744"><a href="#cb56-744" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_type</span><span class="op">:</span> <span class="st">"nested"</span><span class="op">,</span></span>
+<span id="cb56-745"><a href="#cb56-745" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_values_factor</span><span class="op">:</span> <span class="dv">1</span> <span class="op">/</span> <span class="dv">1000000</span><span class="op">,</span></span>
+<span id="cb56-746"><a href="#cb56-746" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_pos</span><span class="op">:</span> [<span class="dv">20</span><span class="op">,</span> <span class="dv">20</span>]<span class="op">,</span></span>
+<span id="cb56-747"><a href="#cb56-747" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_frame</span><span class="op">:</span><span class="kw">true</span><span class="op">,</span></span>
+<span id="cb56-748"><a href="#cb56-748" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_title</span><span class="op">:</span> <span class="st">"Número de habitantes"</span><span class="op">,</span></span>
+<span id="cb56-749"><a href="#cb56-749" aria-hidden="true" tabindex="-1"></a>    <span class="dt">leg_subtitle</span><span class="op">:</span> <span class="st">"(em miliões)"</span><span class="op">,</span></span>
+<span id="cb56-750"><a href="#cb56-750" aria-hidden="true" tabindex="-1"></a>    <span class="dt">tip</span><span class="op">:</span> <span class="vs">`$name ($ISO3)`</span><span class="op">,</span></span>
+<span id="cb56-751"><a href="#cb56-751" aria-hidden="true" tabindex="-1"></a>    <span class="dt">tipstyle</span><span class="op">:</span> {</span>
+<span id="cb56-752"><a href="#cb56-752" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fontSize</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb56-753"><a href="#cb56-753" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fill</span><span class="op">:</span> <span class="st">"white"</span><span class="op">,</span></span>
+<span id="cb56-754"><a href="#cb56-754" aria-hidden="true" tabindex="-1"></a>    <span class="dt">background</span><span class="op">:</span> <span class="st">"#38896F"</span><span class="op">,</span></span>
+<span id="cb56-755"><a href="#cb56-755" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb56-756"><a href="#cb56-756" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb56-757"><a href="#cb56-757" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()<span class="op">;</span></span>
+<span id="cb56-758"><a href="#cb56-758" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-44" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="criar-um-mapa-animado" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Criar um mapa animado</h1>
+<p>Importamos um widget da plataforma do bloco de notas Observable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57" data-startfrom="766" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 765;"><span id="cb57-766"><a href="#cb57-766" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {Scrubber} <span class="im">from</span> <span class="st">"@mbostock/scrubber"</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-45" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>A seguir, criamos o mapa</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58" data-startfrom="773" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 772;"><span id="cb58-773"><a href="#cb58-773" aria-hidden="true" tabindex="-1"></a>viewof anos <span class="op">=</span> <span class="fu">Scrubber</span>(d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">1960</span><span class="op">,</span><span class="dv">2023</span>)<span class="op">,</span> {<span class="dt">autoplay</span><span class="op">:</span> <span class="kw">false</span>})</span>
+<span id="cb58-774"><a href="#cb58-774" aria-hidden="true" tabindex="-1"></a><span class="co">// Tri des données</span></span>
+<span id="cb58-775"><a href="#cb58-775" aria-hidden="true" tabindex="-1"></a>mydata <span class="op">=</span> data<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">year</span> <span class="op">==</span> anos)</span>
+<span id="cb58-776"><a href="#cb58-776" aria-hidden="true" tabindex="-1"></a>mybasemap <span class="op">=</span> viz<span class="op">.</span><span class="at">tool</span><span class="op">.</span><span class="fu">merge</span>({<span class="dt">geom</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">geom_id</span><span class="op">:</span> <span class="st">"ISO3"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> mydata<span class="op">,</span> <span class="dt">data_id</span><span class="op">:</span><span class="st">"id"</span>})<span class="op">.</span><span class="at">featureCollection</span></span>
+<span id="cb58-777"><a href="#cb58-777" aria-hidden="true" tabindex="-1"></a><span class="co">// Carte</span></span>
+<span id="cb58-778"><a href="#cb58-778" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb58-779"><a href="#cb58-779" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> svg <span class="op">=</span> viz<span class="op">.</span><span class="fu">create</span>({<span class="dt">width</span><span class="op">:</span><span class="dv">790</span><span class="op">,</span> <span class="dt">projection</span><span class="op">:</span> d3<span class="op">.</span><span class="fu">geoBertin1953</span>()})</span>
+<span id="cb58-780"><a href="#cb58-780" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">outline</span>()</span>
+<span id="cb58-781"><a href="#cb58-781" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">graticule</span>({<span class="dt">stroke</span><span class="op">:</span> <span class="st">"white"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">40</span>})</span>
+<span id="cb58-782"><a href="#cb58-782" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">path</span>({<span class="dt">datum</span><span class="op">:</span> world<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"white"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span><span class="fl">0.3</span>})</span>
+<span id="cb58-783"><a href="#cb58-783" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">header</span>({<span class="dt">text</span><span class="op">:</span> <span class="vs">`População em </span><span class="sc">${</span>anos<span class="sc">}</span><span class="vs">`</span>})</span>
+<span id="cb58-784"><a href="#cb58-784" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">plot</span>({<span class="dt">type</span><span class="op">:</span><span class="st">"prop"</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> mybasemap<span class="op">,</span>  <span class="kw">var</span><span class="op">:</span> <span class="st">"pop"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span><span class="st">"red"</span><span class="op">,</span> <span class="dt">fixmax</span><span class="op">:</span> <span class="dv">1417173173</span><span class="op">,</span> <span class="dt">tip</span><span class="op">:</span><span class="vs">`$name</span><span class="sc">\n</span><span class="vs">$pop`</span>})</span>
+<span id="cb58-785"><a href="#cb58-785" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">render</span>()</span>
+<span id="cb58-786"><a href="#cb58-786" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-46-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-46-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-46-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-46-4" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="ir-mais-longe" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Ir mais longe</h1>
+<section id="dashboards" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="dashboards"><span class="header-section-number">7.1</span> Dashboards</h2>
+<p>Desde a versão 1.4, Quarto oferece layouts de página no estilo dashboard. Tudo o que vimos acima pode, portanto, ser facilmente usado para criar uma aplicação completa. Alguns exemplos estão disponíveis no site da Quarto.</p>
+<ol type="1">
+<li>Documentação Quarto : quarto.org/docs/dashboards</li>
+</ol>
+</section>
+<section id="exemplos-de-mapas-realizados-com-geoviz" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="exemplos-de-mapas-realizados-com-geoviz"><span class="header-section-number">7.2</span> <strong>Exemplos de mapas realizados com <code>geoviz</code></strong></h2>
+<ul>
+<li><p><a href="https://observablehq.com/@neocartocnrs/night-and-day" title="Night and Day by Observable">Night and Day</a></p></li>
+<li><p><a href="https://observablehq.com/@neocartocnrs/charging-points-for-electric-vehicles-in-paris" title="Charging points in Paris by Observable">Charging points in Paris</a></p></li>
+<li><p><a href="https://observablehq.com/@neocartocnrs/electricity-map" title="Electricity map [FR] by Observable">Electricity map [FR]</a></p></li>
+<li><p><a href="https://observablehq.com/@neocartocnrs/migreurop-explusions-et-oqt" title="OQT &amp; expulsions [FR] by Observable">OQT &amp; expulsions [FR]</a></p></li>
+<li><p><a href="https://observablehq.com/@neocartocnrs/bees" title="Regular grids by Observable">Regular grids</a></p></li>
+<li><p><a href="https://observablehq.com/@neocartocnrs/migrexplorer" title="International migration [FR] by Observable">International migration [FR]</a></p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IndvcmxkYmFuayA9IEZpbGVBdHRhY2htZW50KFwiZGF0YS93b3JsZGJhbmsuemlwXCIpLnppcCgpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ3b3JsZGJhbmsuZmlsZW5hbWVzXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhID0gd29ybGRiYW5rLmZpbGUoXCJkYXRhLmNzdlwiKS5jc3YoKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibWV0YWRhdGEgPSB3b3JsZGJhbmsuZmlsZShcIm1ldGFkYXRhLmNzdlwiKS5jc3YoKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC01IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoid29ybGQgPSB3b3JsZGJhbmsuZmlsZShcIndvcmxkLmpzb25cIikuanNvbigpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJJbnB1dHMudGFibGUoZGF0YSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IklucHV0cy50YWJsZShtZXRhZGF0YSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBzZWFyY2ggPSBJbnB1dHMuc2VhcmNoKGRhdGEsIHsgcXVlcnk6IFwiUG9ydHVnYWxcIiB9KVxuSW5wdXRzLnRhYmxlKHNlYXJjaClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtOSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpeiA9IHJlcXVpcmUoXCJnZW92aXpAMC42LjFcIilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTAiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aXoucGF0aCh7ZGF0YTogd29ybGR9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpei5wYXRoKHtkYXRhOiB3b3JsZCwgc3ZnX3dpZHRoOiA3OTB9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpei5wYXRoKHtkYXRhOiB3b3JsZCwgc3ZnX3dpZHRoOiA3OTAsIGZpbGw6IFwiI2Q2NmJiM1wiLCBzdHJva2VXaWR0aDowLjV9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBjb2xvcmZpbGwgPSBJbnB1dHMuY29sb3Ioe2xhYmVsOiBcIkZvbmRcIiwgdmFsdWU6IFwiIzQ2ODJiNFwifSlcbnZpZXdvZiBjb2xvcnN0cm9rZSA9IElucHV0cy5zZWxlY3QoW1wicmVkXCIsIFwiZ3JlZW5cIiwgXCJibHVlXCJdLCB7bGFiZWw6IFwiQ29udG91clwifSlcbnZpZXdvZiB0aGlja25lc3MgPSBJbnB1dHMucmFuZ2UoWzAsIDEwXSwge3N0ZXA6IDAuMSwgbGFiZWw6IFwiRXBhaXNzZXVyXCIsIHZhbHVlOjF9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpei5wYXRoKHtkYXRhOiB3b3JsZCwgc3ZnX3dpZHRoOjc5MCwgZmlsbDogY29sb3JmaWxsLCBzdHJva2U6IGNvbG9yc3Ryb2tlLCBzdHJva2VXaWR0aDogdGhpY2tuZXNzfSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aXouY2lyY2xlKHsgcjogNDAsIGZpbGw6IFwiIzM4ODk2RlwiIH0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE2IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidml6LnNxdWFyZSh7IHNpZGU6IDYwLCBmaWxsOiBcIiMzODg5NkZcIiwgYW5nbGU6IDQ1IH0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE3IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidml6LnNxdWFyZSh7IGRhdGE6IHdvcmxkLCBzdmdfd2lkdGg6IDc5MCwgc2lkZTogNiwgZmlsbDogXCIjMzg4OTZGXCIsIGFuZ2xlOiA0NSB9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xOCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpei50ZXh0KHsgZGF0YTogd29ybGQsIHN2Z193aWR0aDogNzg1LCB0ZXh0OiBcIklTTzNcIiwgZmlsbDogXCIjMzg4OTZGXCIgfSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTkiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG5sZXQgc3ZnID0gdml6LmNyZWF0ZSgpXG5zdmcucGF0aCh7ZGF0YTp3b3JsZH0pXG5yZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIwIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xuICBsZXQgc3ZnID0gdml6LmNyZWF0ZSh7ZG9tYWluOiB3b3JsZCwgd2lkdGg6IDc5MH0pXG4gIHN2Zy5wYXRoKHtkYXRhOndvcmxkLCBmaWxsIDpcIiMzODg5NkZcIn0pXG4gIHJldHVybiBzdmcucmVuZGVyKClcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjEiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkMyA9IHJlcXVpcmUoXCJkM1wiLCBcImQzLWdlb1wiLCBcImQzLWdlby1wcm9qZWN0aW9uXCIsIFwiZDMtZ2VvLXBvbHlnb25cIilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHtkb21haW46IHdvcmxkLCB3aWR0aDogNzkwLCBwcm9qZWN0aW9uOiBkMy5nZW9OYXR1cmFsRWFydGgxKCl9KVxuICBzdmcucGF0aCh7ZGF0YTp3b3JsZCwgZmlsbCA6XCIjMzg4OTZGXCJ9KVxuICByZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIzIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xuICBsZXQgc3ZnID0gdml6LmNyZWF0ZSh7d2lkdGg6IDc5MCwgcHJvamVjdGlvbjogZDMuZ2VvQWl0b2ZmKCkgfSlcbiAgc3ZnLm91dGxpbmUoKVxuICBzdmcuZ3JhdGljdWxlKHtzdHJva2U6IFwid2hpdGVcIiwgc3RlcDogNDB9KVxuICBzdmcucGF0aCh7ZGF0dW06d29ybGQsIGZpbGwgOlwid2hpdGVcIiwgZmlsbE9wYWNpdHk6MC4zfSlcbiAgc3ZnLmhlYWRlcih7dGV4dDogXCJIZWxsbyBXb3JsZFwifSlcbiAgcmV0dXJuIHN2Zy5yZW5kZXIoKVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InByb2plY3Rpb25zID0gW1xuICB7IG5hbWU6IFwiSW50ZXJydXB0ZWQgU2ludXNvaWRhbFwiLCBwcm9qOiBkMy5nZW9JbnRlcnJ1cHRlZFNpbnVzb2lkYWwoKSB9LFxuICB7IG5hbWU6IFwiR2luZ2VyeVwiLCBwcm9qOiBkMy5nZW9HaW5nZXJ5KCkgfSxcbiAgeyBuYW1lOiBcIkJha2VyXCIsIHByb2o6IGQzLmdlb0Jha2VyKCkgfSxcbiAgeyBuYW1lOiBcIlBvbHloZWRyYWxXYXRlcm1hblwiLCBwcm9qOiBkMy5nZW9Qb2x5aGVkcmFsV2F0ZXJtYW4oKSAgfSwgICAgIFxuXVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBwcm9qZWN0aW9uID0gSW5wdXRzLnNlbGVjdChwcm9qZWN0aW9ucywge1xuICBsYWJlbDogXCJQcm9qZWN0aW9uXCIsXG4gIGZvcm1hdDogKHgpID0+IHgubmFtZVxufSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDogNzkwLCBwcm9qZWN0aW9uOiBwcm9qZWN0aW9uLnByb2p9KVxuICBzdmcuZ3JhdGljdWxlKHtzdHJva2UgOlwiIzM4ODk2RlwiLCBzdHJva2VXaWR0aDogMS41LCBzdHJva2VEYXNoYXJyYXk6bnVsbCwgc3RlcDo0MCwgY2xpcFBhdGggOiBzdmcuZWZmZWN0LmNsaXBQYXRoKCl9KVxuICBzdmcucGF0aCh7ZGF0dW06d29ybGQsIGZpbGwgOlwiIzM4ODk2RlwifSlcbiAgc3ZnLm91dGxpbmUoe3N0cm9rZSA6XCIjMzg4OTZGXCIsIGZpbGw6XCJub25lXCIsIHN0cm9rZVdpZHRoOiAyfSlcbiAgcmV0dXJuIHN2Zy5yZW5kZXIoKVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbiAgbGV0IHN2ZyA9IHZpei5jcmVhdGUoe3dpZHRoOiA3OTAsIHByb2plY3Rpb246IGQzLmdlb0JlcnRpbjE5NTMoKSwgem9vbWFibGU6dHJ1ZSB9KVxuICBzdmcub3V0bGluZSgpXG4gIHN2Zy5ncmF0aWN1bGUoe3N0cm9rZTogXCJ3aGl0ZVwifSlcbiAgc3ZnLnBhdGgoe2RhdHVtOndvcmxkLCBmaWxsIDpcIndoaXRlXCIsIGZpbGxPcGFjaXR5OjAuM30pXG4gIHJldHVybiBzdmcucmVuZGVyKClcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjgiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDogNzkwLCBwcm9qZWN0aW9uOiBkMy5nZW9PcnRob2dyYXBoaWMoKS5yb3RhdGUoWy0zMCwgLTMwXSksIHpvb21hYmxlOlwidmVyc29yXCIgfSlcbiAgc3ZnLm91dGxpbmUoKVxuICBzdmcuZ3JhdGljdWxlKHtzdHJva2U6IFwid2hpdGVcIn0pXG4gIHN2Zy5wYXRoKHtkYXR1bTp3b3JsZCwgZmlsbCA6XCJ3aGl0ZVwiLCBmaWxsT3BhY2l0eTowLjN9KVxuICByZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI5IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xuICBsZXQgc3ZnID0gdml6LmNyZWF0ZSh7d2lkdGg6IDc5MCwgcHJvamVjdGlvbjogZDMuZ2VvRWNrZXJ0MygpLCB6b29tYWJsZTpcInZlcnNvclwiIH0pXG4gIHN2Zy5vdXRsaW5lKClcbiAgc3ZnLmdyYXRpY3VsZSh7c3Ryb2tlOiBcIndoaXRlXCJ9KVxuICBzdmcucGF0aCh7ZGF0dW06d29ybGQsIGZpbGwgOlwid2hpdGVcIiwgZmlsbE9wYWNpdHk6MC4zfSlcbiAgcmV0dXJuIHN2Zy5yZW5kZXIoKVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbiAgbGV0IHN2ZyA9IHZpei5jcmVhdGUoe3dpZHRoOiA3OTAsIHByb2plY3Rpb246IFwibWVyY2F0b3JcIiwgem9vbWFibGU6dHJ1ZSB9KVxuICBzdmcudGlsZSh7dXJsOlwibmF0Z2VvXCJ9KVxuICBzdmcucGF0aCh7ZGF0dW06d29ybGQsIGZpbGwgOlwibm9uZVwiLCBzdHJva2U6XCJ3aGl0ZVwifSlcbiAgcmV0dXJuIHN2Zy5yZW5kZXIoKVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbiAgbGV0IHN2ZyA9IHZpei5jcmVhdGUoe3dpZHRoOiA3OTAsIHByb2plY3Rpb246IGQzLmdlb05hdHVyYWxFYXJ0aDEoKX0pXG4gIHN2Zy5wYXRoKHtkYXRhOndvcmxkLCBmaWxsIDpcIiMzODg5NkZcIiwgc3Ryb2tlOlwid2hpdGVcIiwgc3Ryb2tlV2lkdGg6MC4zLCB0aXA6dHJ1ZX0pXG4gIHJldHVybiBzdmcucmVuZGVyKClcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDogNzkwLCBwcm9qZWN0aW9uOiBkMy5nZW9OYXR1cmFsRWFydGgxKCl9KVxuICBzdmcucGF0aCh7ZGF0YTp3b3JsZCwgZmlsbCA6XCIjMzg4OTZGXCIsIHN0cm9rZTpcIndoaXRlXCIsIHN0cm9rZVdpZHRoOjAuMywgdGlwOiBgRXN0ZSBwYcOtcyDDqSAkTkFNRWZyIGUgbyBzZXUgY8OzZGlnbyDDqSA6ICRJU08zYH0pXG4gIHJldHVybiBzdmcucmVuZGVyKClcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJJbnB1dHMudGFibGUoZGF0YSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhMjAyMCA9IGRhdGEuZmlsdGVyKGQgPT4gZC55ZWFyID09IDIwMjApXG5JbnB1dHMudGFibGUoZGF0YTIwMjApXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTM1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiam9pbnR1cmUgPSB2aXoudG9vbC5tZXJnZSh7Z2VvbTogd29ybGQsIGdlb21faWQ6IFwiSVNPM1wiLCBkYXRhOiBkYXRhMjAyMCwgZGF0YV9pZDpcImlkXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImpvaW50dXJlIFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IndvcmxkMjAyMCA9IGpvaW50dXJlLmZlYXR1cmVDb2xsZWN0aW9uXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTM4IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xubGV0IHN2ZyA9IHZpei5jcmVhdGUoe3dpZHRoOiA3OTAsIGRvbWFpbjogd29ybGQyMDIwfSlcbnN2Zy5wbG90KHt0eXBlOiBcImJhc2VcIiwgZGF0YTogd29ybGQyMDIwLCBmaWxsOiBcIiNDQ0NcIn0pXG5zdmcucGxvdCh7dHlwZTogXCJwcm9wXCIsIGRhdGE6IHdvcmxkMjAyMCwgdmFyOiBcInBvcFwiLCBmaWxsOlwiI2Q0Nzk4OFwiLCBsZWdfcG9zOlsxMCwgMjAwXX0pXG5yZXR1cm4gc3ZnLnJlbmRlcigpXG59IFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zOSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbmxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDogNzkwLCBkb21haW46IHdvcmxkMjAyMH0pXG5zdmcucGxvdCh7dHlwZTogXCJ0eXBvXCIsIGRhdGE6IHdvcmxkMjAyMCwgdmFyOiBcInJlZ2lvblwiLCBsZWdfcG9zOlsxMCwgMTAwXX0pXG5yZXR1cm4gc3ZnLnJlbmRlcigpXG59IFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00MCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbmxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDogNzkwLCBkb21haW46IHdvcmxkMjAyMH0pXG5zdmcucGxvdCh7dHlwZTogXCJjaG9yb1wiLCBkYXRhOiB3b3JsZDIwMjAsIHZhcjogXCJnZHBwY1wiLCBsZWdfcG9zOlsxMCwgMTAwXX0pXG5yZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQxIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xubGV0IHN2ZyA9IHZpei5jcmVhdGUoe3dpZHRoOiA3OTAsIGRvbWFpbjogd29ybGQyMDIwfSlcbnN2Zy5wbG90KHt0eXBlOiBcInByb3BjaG9yb1wiLCBkYXRhOiB3b3JsZDIwMjAsIHZhcjE6IFwicG9wXCIsIHZhcjI6IFwiZ2RwcGNcIn0pXG5yZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQyIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHRpdGxlID0gSW5wdXRzLnRleHRhcmVhKHtsYWJlbDogXCJUw610dWxvIGRvIG1hcGFcIiwgcGxhY2Vob2xkZXI6IFwiVMOtdHVsby4uLlwifSlcbnZpZXdvZiBrID0gSW5wdXRzLnJhbmdlKFsxMCwgNzBdLCB7c3RlcDogMSwgbGFiZWw6IFwiUmFpbyBkbyBtYWlvciBjw61jcmN1bG9cIn0pXG52aWV3b2YgdG9nZ2xlID0gSW5wdXRzLnRvZ2dsZSh7bGFiZWw6IFwiQWZhc3RhciBvcyBjw61yY3Vsb3MgP1wiLCB2YWx1ZTogZmFsc2V9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00MyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbmxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDo3OTAsIGRvbWFpbjogd29ybGQyMDIwfSlcbnN2Zy5wYXRoKHtkYXR1bTogd29ybGQyMDIwLCBmaWxsOlwiI0NDQ1wifSlcbnN2Zy5wbG90KHt0eXBlOlwicHJvcFwiLCBkYXRhOiB3b3JsZDIwMjAsIHZhcjogXCJwb3BcIiwgazprLCBmaWxsOlwiI2UwMmQ1MVwiLCBkb2RnZTogdG9nZ2xlLCBsZWdfcG9zOlsxMCwgMjAwXSB9KVxuc3ZnLmhlYWRlcih7dGV4dDogdGl0bGUgfSlcbnJldHVybiBzdmcucmVuZGVyKClcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNDQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ7XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHsgcHJvamVjdGlvbjogZDMuZ2VvT3J0aG9ncmFwaGljKCkucm90YXRlKFstNTAsLTUwXSksIHpvb21hYmxlOiBcInZlcnNvclwiLCB3aWR0aDo3OTAgfSk7XG4gIHN2Zy5wbG90KHsgdHlwZTogXCJvdXRsaW5lXCIsIGZpbGw6IHN2Zy5lZmZlY3QucmFkaWFsR3JhZGllbnQoKSB9KTtcbiAgc3ZnLnBsb3Qoe1xuICAgIHR5cGU6IFwiZ3JhdGljdWxlXCIsXG4gICAgc3Ryb2tlOiBcIndoaXRlXCIsXG4gICAgc3RlcDogNDAsXG4gICAgc3Ryb2tlV2lkdGg6IDIsXG4gICAgc3Ryb2tlT3BhY2l0eTogMC4zXG4gIH0pO1xuICBzdmcucGxvdCh7IHR5cGU6IFwidHlwb1wiLCBkYXRhOiB3b3JsZDIwMjAsIHZhcjogXCJyZWdpb25cIiwgc3Ryb2tlOiBcIm5vbmVcIiwgbGVnZW5kOiBmYWxzZSB9KTtcbiAgc3ZnLnBsb3Qoe1xuICAgIHR5cGU6IFwicHJvcFwiLFxuICAgIHN5bWJvbDogXCJzcXVhcmVcIixcbiAgICBkYXRhOiB3b3JsZDIwMjAsXG4gICAgdmFyOiBcInBvcFwiLFxuICAgIGZpbGw6IFwicmVkXCIsXG4gICAgZmlsbE9wYWNpdHk6MC44LFxuICAgIGxlZ190eXBlOiBcIm5lc3RlZFwiLFxuICAgIGxlZ192YWx1ZXNfZmFjdG9yOiAxIC8gMTAwMDAwMCxcbiAgICBsZWdfcG9zOiBbMjAsIDIwXSxcbiAgICBsZWdfZnJhbWU6dHJ1ZSxcbiAgICBsZWdfdGl0bGU6IFwiTsO6bWVybyBkZSBoYWJpdGFudGVzXCIsXG4gICAgbGVnX3N1YnRpdGxlOiBcIihlbSBtaWxpw7VlcylcIixcbiAgICB0aXA6IGAkbmFtZSAoJElTTzMpYCxcbiAgICB0aXBzdHlsZToge1xuICAgIGZvbnRTaXplOiAyMCxcbiAgICBmaWxsOiBcIndoaXRlXCIsXG4gICAgYmFja2dyb3VuZDogXCIjMzg4OTZGXCIsXG4gIH1cbiAgfSk7XG4gIHJldHVybiBzdmcucmVuZGVyKCk7XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQ1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaW1wb3J0IHtTY3J1YmJlcn0gZnJvbSBcIkBtYm9zdG9jay9zY3J1YmJlclwiXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQ2IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGFub3MgPSBTY3J1YmJlcihkMy5yYW5nZSgxOTYwLDIwMjMpLCB7YXV0b3BsYXk6IGZhbHNlfSlcbi8vIFRyaSBkZXMgZG9ubsOpZXNcbm15ZGF0YSA9IGRhdGEuZmlsdGVyKGQgPT4gZC55ZWFyID09IGFub3MpXG5teWJhc2VtYXAgPSB2aXoudG9vbC5tZXJnZSh7Z2VvbTogd29ybGQsIGdlb21faWQ6IFwiSVNPM1wiLCBkYXRhOiBteWRhdGEsIGRhdGFfaWQ6XCJpZFwifSkuZmVhdHVyZUNvbGxlY3Rpb25cbi8vIENhcnRlXG57XG4gIGxldCBzdmcgPSB2aXouY3JlYXRlKHt3aWR0aDo3OTAsIHByb2plY3Rpb246IGQzLmdlb0JlcnRpbjE5NTMoKX0pXG4gIHN2Zy5vdXRsaW5lKClcbiAgc3ZnLmdyYXRpY3VsZSh7c3Ryb2tlOiBcIndoaXRlXCIsIHN0ZXA6IDQwfSlcbiAgc3ZnLnBhdGgoe2RhdHVtOiB3b3JsZCwgZmlsbDpcIndoaXRlXCIsIGZpbGxPcGFjaXR5OjAuM30pXG4gIHN2Zy5oZWFkZXIoe3RleHQ6IGBQb3B1bGHDp8OjbyBlbSAke2Fub3N9YH0pXG4gIHN2Zy5wbG90KHt0eXBlOlwicHJvcFwiLCBkYXRhOiBteWJhc2VtYXAsICB2YXI6IFwicG9wXCIsIGZpbGw6XCJyZWRcIiwgZml4bWF4OiAxNDE3MTczMTczLCB0aXA6YCRuYW1lXFxuJHBvcGB9KVxuICByZXR1cm4gc3ZnLnJlbmRlcigpXG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3NlYXJjaCcpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdjb2xvcmZpbGwnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnY29sb3JzdHJva2UnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgndGhpY2tuZXNzJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3Byb2plY3Rpb24nKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgndGl0bGUnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnaycpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd0b2dnbGUnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYW5vcycpIn1dfQ==
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,809 @@
+---
+title: "Criar mapas para a Web com `quarto {ojs}` e `geoviz`"
+format:
+  html:
+    theme: journal
+    toc: true
+    number-sections: true
+    number-depth: 2
+editor: visual
+lang: pt
+---
+
+O objetivo desta sessão é introduzir o participante à criação de mapas interativos utilizando o **Quarto** e a biblioteca JavaScript **geoviz**.
+
+# Introdução
+
+Antes de começar, por favor, certifique-se que leu a apresentação de introdução à Web, à sua história, às suas linguagens e ao Observable JavaScript. Ela é um pré-requisito para compreender o que vem a seguir.
+
+# Introdução a Quarto
+
+## Ambiente de software.
+
+Este tutorial utiliza o software [Quarto](https://quarto.org). Para o instalar, pode usar o link seguinte:
+
+<https://quarto.org/docs/get-started>
+
+A seguir, precisa de um ambiente de desenvolvimento para escrever o código e ver os resultados. Tem várias escolhas possíveis:
+
+![](img/ide.png)
+
+Nesta sessão, vamos usar o RStudio, um IDE mais focado para a linguagem R mas que integra de forma muito eficiente a criação de notebooks com Quarto onde se pode integrar listagens de código JavaScript.
+
+## Criar um documento Quarto
+
+-   No seu computador, crie uma pasta `TP_geoviz` num local à sua escolha.
+-   Abra o RStudio
+-   Crie um documento `Quarto (ficheiro > Novo ficheiro > Documento Quarto`\`
+
+![](img/quarto-new-project.png)
+
+-   Clique em "Criar documento vazio" no canto inferior esquerdo.
+-   Mude para o modo de código fonte (\`Source\`).
+
+![](img/quarto-new.png)
+
+Irá obter um ficheiro com as seguintes linhas:
+
+``` yaml
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+```
+
+A informação delimitada pelos simbolos \`---\` correspondem a especificação **yaml** do ficheiro, uma linguagem de configuração.
+
+Selecionar um título Guardar o ficheiro **index.qmd** na pasta **TP_geoviz**. Nesta pasta, pode criar também uma subdiretoria de **dados** para armazenar os dados.
+
+![](img/quarto-project-structure.png)
+
+## Resumo das bases
+
+Neste tutorial, vamos criar mapas utilizando **Observable JavaScript** (ou ***ojs***). Lembre-se que ***ojs*** é um conjunto de melhorias feitas no JavaScript com o objetivo de torná-lo uma linguagem dedicada à visualização de dados para a web. Essa linguagem está totalmente integrada em **Quarto**.
+
+As características do ***ojs*** são as seguintes:
+
+-   É JavaScript + bibliotecas pré-carregadas como Plot & d3js 📊
+-   Tudo é reativo 🔥 e reproduzido em tempo real
+-   A ordem das células não importa 🤯
+-   Cada início de linha identifica uma célula ***ojs***. O nome destas células deve ser único para todo o documento.
+
+Em Quarto, todas as instruções a seguir são escritas em pedaços de ojs
+
+\`\`\`{ojs}
+
+\`\`\`
+
+::: callout-caution
+## Cuidado
+
+Os *chunks* e as células são dois conceitos diferentes.
+:::
+
+Um *chunk* que contém uma única célula
+
+``` shell
+sum = 10 + 10
+```
+
+Um *chunk* que contém três células
+
+``` shell
+a = 10
+b = 20
+c = a * b
+```
+
+Um *chunk* que contém uma única célula
+
+``` shell
+{
+  // código JavaScript
+  let a = 10
+  let b = 20
+  return a * b
+}
+```
+
+Para cada bloco, pode utilizar `echo` para definir se pretende ou não que o código seja apresentado no seu bloco de notas final. Com `eval`, pode escolher se o código deve ou não ser executado.
+
+\`\`\`{ojs}
+
+/ / \| echo: false
+
+/ / \| eval: true
+
+\`\`\`
+
+O código em linha também permite a execução de código dentro do texto no formato *markdown*. A sintaxe do código em linha é semelhante à dos blocos de código, exceto que é utilizado um único traço (\`) em vez de três traços (\`\`\`).
+
+``` html
+raio = 5
+```
+
+``` md
+O raio da circunferência é igual a **``{ojs} radius``**.
+```
+
+resulta nisto :
+
+```         
+O raio do círculo é igual a 5
+```
+
+Para gerar o documento, clique no botão *Renderizar* ou utilize o atalho de teclado **Ctrl+Shift+K**.
+
+Depois de ter clicado em \*Renderizar\*, a página Web é apresentada no painel Visualizador e é criada uma pasta **Docs**. Ela contém o site gerado.
+
+Também pode clicar no ícone *Ver numa nova janela* para ver o documento no seu navegador Web habitual.
+
+![](img/webview.png){fig-align="center"}
+
+## Documentação e exemplos
+
+Ao longo deste caderno, pode consultar a documentação clicando neste ícone.
+
+![](img/icone-doc.png)
+
+Também pode aceder a exemplos pedagógicos e demonstrações online clicando neste ícone.
+
+![](img/icone-ojs.png)
+
+# Os dados
+
+O conjunto de dados utilizado provém do [Banco Mundial](https://data.worldbank.org/indicator). Os dados foram formatados [aqui](https://observablehq.com/@neocartocnrs/world-bank-data).
+
+Descarregue os dados e coloque o ficheiro zip no seu diretório de dados.
+
+![](img/icon-download.png){width="50"}
+
+## **Importação dos dados**
+
+Em {ojs}, importamos os dados com a instrução `FileAttachment()`[![](img/icone-doc.png)](https://github.com/observablehq/stdlib#file-attachments)
+
+Uma vez que os dados estão no formato .zip, escrevemos :
+
+```{ojs}
+worldbank = FileAttachment("data/worldbank.zip").zip()
+```
+
+Este ficheiro zip contém 3 ficheiros.
+
+```{ojs}
+worldbank.filenames
+```
+
+Existem várias funções disponíveis para interpretar formatos de dados. A função `.csv()` é utilizada para importar dados ***csv***. A função `.xlsx()` é utilizada para importar ***folhas de cálculo Excel***. A função `.json()` é utilizada para importar dados em formato ***JSO***N. Aqui, vamos criar 3 conjuntos de dados distintos.
+
+-   Os dados
+
+```{ojs}
+data = worldbank.file("data.csv").csv()
+```
+
+-   Os metadados
+
+```{ojs}
+metadata = worldbank.file("metadata.csv").csv()
+```
+
+-   As bases dos mapas (países do mundo)
+
+```{ojs}
+world = worldbank.file("world.json").json()
+```
+
+## Visualização de dados de atributos
+
+Para visualizar uma tabela de dados, pode utilizar a instrução `Inputs.table()`.
+
+```{ojs}
+Inputs.table(data)
+```
+
+```{ojs}
+Inputs.table(metadata)
+```
+
+Esta visualização de tabela também pode ser combinada com a função `Inputs.search()`.
+
+```{ojs}
+viewof search = Inputs.search(data, { query: "Portugal" })
+Inputs.table(search)
+```
+
+::: {.callout-tip collapse="true"}
+É possível combinar instruções em ***R*** e instruções em ***ojs*** utilizando a instrução `ojs_define()`.
+
+Por exemplo :
+
+``` r
+# chunk r
+datafromr <- read.csv("data/data.csv")
+ojs_define(ojsdata = datafromr)
+```
+
+``` javascript
+// chunk ojs
+Inputs.table(transpose(ojsdata))
+```
+
+Também funciona com objectos espaciais. Mas para isso, é preciso fazer as coisas de forma um pouco diferente.
+
+``` r
+# chunk r
+library("sf")
+library("geojsonsf")
+geomfromr <- st_read("data/world.gpkg")
+ojs_define(ojsgeom = sf_geojson(geomfromr))
+```
+
+``` ojs
+// chunk ojs
+JSON.parse(ojsgeom)
+```
+:::
+
+## Visualizar Geometrias
+
+O mapa de fundo está no formato geoJSON
+
+Para o visualizar, é necessário importar uma biblioteca de mapas. Neste caso, escolhemos a biblioteca geoviz
+
+[![](img/geoviz.jpeg){width="300"}](https://riatelab.github.io/geoviz/)
+
+É importada utilizando a instrução `require()`.
+
+```{ojs}
+viz = require("geoviz@0.6.1")
+```
+
+Para ver simplesmente as geometrias com uma cor aleatória, digite :
+
+```{ojs}
+viz.path({data: world})
+```
+
+O mapa é um pouco grande. Podemos redimensioná-lo utilizando o parâmetro `svg_width`.
+
+```{ojs}
+viz.path({data: world, svg_width: 790})
+```
+
+::: callout-note
+## Cuidado
+
+O atributo `svg_width` modifica os parâmetros do contentor SVG que contém a camada. Veremos mais tarde como funcionam os contentores.
+:::
+
+## Personalizar a visualização
+
+A biblioteca ***geoviz*** não é apenas um visualizador de camadas SIG. É uma ferramenta para criar mapas vectoriais. Com o geoviz, os mapas são desenhados em formato SVG. Por conseguinte, é possível utilizar todos os atributos SVG para modificar o mapa. Há apenas uma diferença. O JavaScript não suporta nomes de variáveis com hífen. Por isso, é habitual converter este hífen em camelCase. Por exemplo: `stroke-width` dará `strokeWidth`.
+
+Pode tentar :
+
+-   `fill`: cor de fundo
+-   `stroke`: cor do contorno
+-   `strokeWidth`: espessura da linha
+-   `fillOpacity`: opacidade do fundo
+-   `strokeOpacity`: opacidade do contorno
+-   `strokeDashArray`: linhas pontilhadas (por exemplo, \[2,3\])
+
+Em suma, pode personalizar tudo tal como num mapa do ***Inkscape*** ou do *`Illustrator`*.
+
+```{ojs}
+viz.path({data: world, svg_width: 790, fill: "#d66bb3", strokeWidth:0.5})
+```
+
+Lembre-se que, com o Observable, estamos num ambiente interativo e reativo. Assim, podemos criar interacções para personalizar o mapa.
+
+```{ojs}
+viewof colorfill = Inputs.color({label: "Fond", value: "#4682b4"})
+viewof colorstroke = Inputs.select(["red", "green", "blue"], {label: "Contour"})
+viewof thickness = Inputs.range([0, 10], {step: 0.1, label: "Epaisseur", value:1})
+```
+
+```{ojs}
+viz.path({data: world, svg_width:790, fill: colorfill, stroke: colorstroke, strokeWidth: thickness})
+```
+
+# A biblioteca geoviz
+
+## Documentação e exemplos
+
+A documentação do `geoviz` está disponível no seguinte endereço: [riatelab.github.io/geoviz](https://riatelab.github.io/geoviz/). Clique nesta hiperligação e guarde a página para referência futura.
+
+[![](img/geoviz2.png)](https://riatelab.github.io/geoviz/)
+
+Para o ajudar a compreender o funcionamento desta biblioteca, estão também disponíveis vários exemplos em direto na plataforma do bloco de notas Observable.
+
+Hello geoviz
+
+Map container
+
+Path mark
+
+Circle mark
+
+Half-circle mark
+
+Spike mark
+
+Square mark
+
+Prop symbols
+
+Text mark
+
+Tile mark
+
+Choropleth
+
+Typolgy
+
+Tooltip
+
+Legends
+
+SVG filters and clip
+
+Insets
+
+Layout marks
+
+Pan and zoom
+
+Interactivity
+
+Handle geometries
+
+Draw function
+
+## **Os `marks`**
+
+À semelhança da instrução `path`, a biblioteca ***geoviz*** fornece uma série de **`marks`** para criar um mapa.
+
+Por exemplo :
+
+-   `circle` : cículos
+
+-   `square` : quadrados \[
+
+-   `halfcircle` : meios círculos
+
+-   `spike` : pontas
+
+-   `graticule` : linhas de latitude e longitude
+
+-   `outline` : espaço terrestre numa determinada projeção
+
+-   `tile` : mosaicos raster
+
+-   `header` :título do mapa
+
+-   `footer` : rodapé (fontes)
+
+-   `north`: seta do norte
+
+-   `scalebar` : barra de escala
+
+-   `text` : textos et rótulos
+
+É possível chamar diretamente estes `marks`.
+
+```{ojs}
+viz.circle({ r: 40, fill: "#38896F" })
+```
+
+```{ojs}
+viz.square({ side: 60, fill: "#38896F", angle: 45 })
+```
+
+Se utilizarmos o atributo de dados, as marcas são colocadas no centro das unidades geográficas. Por exemplo
+
+```{ojs}
+viz.square({ data: world, svg_width: 790, side: 6, fill: "#38896F", angle: 45 })
+```
+
+```{ojs}
+viz.text({ data: world, svg_width: 785, text: "ISO3", fill: "#38896F" })
+```
+
+Mas, na maioria das vezes, estas marcas serão utilizadas dentro de contentores nos quais podem ser sobrepostas.
+
+## Os Contentores
+
+No geoviz, para combinar diferentes camadas num mapa, é necessário criar um contentor SVG. Este contentor é criado utilizando a instrução `create()`. Pode então ser apresentado utilizando a função `render()`.
+
+::: callout-tip
+## Dica
+
+Para criar o mapa numa única célula, coloque as instruções entre chavetas
+:::
+
+```{ojs}
+{
+let svg = viz.create()
+svg.path({data:world})
+return svg.render()
+}
+```
+
+Para funcionar corretamente, o contentor necessita que defina uma projeção e/ou um domínio.
+
+::: callout-note
+Note que, a partir de agora, a função create() será utilizada para definir o tamanho do mapa.
+:::
+
+Vamos recomeçar:
+
+```{ojs}
+{
+  let svg = viz.create({domain: world, width: 790})
+  svg.path({data:world, fill :"#38896F"})
+  return svg.render()
+}
+```
+
+## As projeções
+
+No ecossistema d3js e geoviz, utilizamos funções de projeção muito específicas dedicadas à representação de dados, divididas em 3 bibliotecas: d3-geo , d3-geo-projection e d3-geo-polygon .
+
+São carregados da seguinte forma:
+
+```{ojs}
+d3 = require("d3", "d3-geo", "d3-geo-projection", "d3-geo-polygon")
+```
+
+O princípio é que a entrada é sempre uma geometria em formato lat/lon, que é projetada em tempo real quando é apresentada.
+
+Por exemplo :
+
+```{ojs}
+{
+  let svg = viz.create({domain: world, width: 790, projection: d3.geoNaturalEarth1()})
+  svg.path({data:world, fill :"#38896F"})
+  return svg.render()
+}
+```
+
+::: callout-note
+Note que também poderia ter escrito simplesmente :
+
+``` javascript
+viz.path({data:world, fill :"#38896F", svg_width: 790, svg_projection: d3.geoNaturalEarth1()})
+```
+:::
+
+Com os contentores, pode-se agora empilhar camadas. Ao combinar marcas e atributos SVG, pode-se criar modelos cartográficos muito bonitos.
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoAitoff() })
+  svg.outline()
+  svg.graticule({stroke: "white", step: 40})
+  svg.path({datum:world, fill :"white", fillOpacity:0.3})
+  svg.header({text: "Hello World"})
+  return svg.render()
+}
+```
+
+Graças aos Inputs, pode divertir-se a visualizar diferentes projecções.
+
+```{ojs}
+projections = [
+  { name: "Interrupted Sinusoidal", proj: d3.geoInterruptedSinusoidal() },
+  { name: "Gingery", proj: d3.geoGingery() },
+  { name: "Baker", proj: d3.geoBaker() },
+  { name: "PolyhedralWaterman", proj: d3.geoPolyhedralWaterman()  },     
+]
+```
+
+```{ojs}
+viewof projection = Inputs.select(projections, {
+  label: "Projection",
+  format: (x) => x.name
+})
+```
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: projection.proj})
+  svg.graticule({stroke :"#38896F", strokeWidth: 1.5, strokeDasharray:null, step:40, clipPath : svg.effect.clipPath()})
+  svg.path({datum:world, fill :"#38896F"})
+  svg.outline({stroke :"#38896F", fill:"none", strokeWidth: 2})
+  return svg.render()
+}
+```
+
+## Zoom e Pan
+
+No contentor, utilizando o atributo `zoomable`, pode-se também especificar se se pretende que o mapa seja passível de zoom.
+
+Por exemplo, o atributo :
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoBertin1953(), zoomable:true })
+  svg.outline()
+  svg.graticule({stroke: "white"})
+  svg.path({datum:world, fill :"white", fillOpacity:0.3})
+  return svg.render()
+}
+```
+
+Com uma projeção ortográfica e o atributo `outzoomable = “versor”`, pode-se também utilizar o centro de projeção para rodar o globo.
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoOrthographic().rotate([-30, -30]), zoomable:"versor" })
+  svg.outline()
+  svg.graticule({stroke: "white"})
+  svg.path({datum:world, fill :"white", fillOpacity:0.3})
+  return svg.render()
+}
+```
+
+Note que o `versor` pode ser aplicado a qualquer projeção, o que pode ser confuso, mas também é muito útil se quiser realmente compreender como funcionam as projecções cartográficas.
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoEckert3(), zoomable:"versor" })
+  svg.outline()
+  svg.graticule({stroke: "white"})
+  svg.path({datum:world, fill :"white", fillOpacity:0.3})
+  return svg.render()
+}
+```
+
+## Grelhas raster
+
+Tal como as outras marcas, as grelhas raster são igualmente passíveis de zoom.
+
+Os estilos disponíveis por defeito são : “openstreetmap”, “opentopomap”, “worldterrain”, “worldimagery”, “worldStreet”, “worldphysical”, “shadedrelief”, “stamenterrain”, “cartodbvoyager”, “stamentoner”, “stamentonerbackground”, “stamentonerlite”, “stamenwatercolor”, “hillshade”, “worldocean”, “natgeo” e “worldterrain”
+
+::: callout-caution
+Para utilizar o *mark* `tile`, é necessário utilizar a projeção “mercator”.
+:::
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: "mercator", zoomable:true })
+  svg.tile({url:"natgeo"})
+  svg.path({datum:world, fill :"none", stroke:"white"})
+  return svg.render()
+}
+```
+
+## As bolhas de informação
+
+Com o geoviz, pode adicionar bolhas de informação a qualquer objeto. Se utilizar `tip: true`, todos os campos são apresentados.
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoNaturalEarth1()})
+  svg.path({data:world, fill :"#38896F", stroke:"white", strokeWidth:0.3, tip:true})
+  return svg.render()
+}
+```
+
+Mas tudo pode ser personalizado:
+
+```{ojs}
+{
+  let svg = viz.create({width: 790, projection: d3.geoNaturalEarth1()})
+  svg.path({data:world, fill :"#38896F", stroke:"white", strokeWidth:0.3, tip: `Este país é $NAMEfr e o seu código é : $ISO3`})
+  return svg.render()
+}
+```
+
+# Cartografia estatística
+
+## A junção
+
+A primeira coisa a fazer aqui é realizar uma junção entre as geometrias e os dados estatísticos importados no início deste caderno a partir de um ficheiro zip.
+
+Vejamos novamente a tabela de dados.
+
+```{ojs}
+Inputs.table(data)
+```
+
+A tabela contém informações para várias datas. Por conseguinte, o mesmo identificador (`id`) aparece várias vezes na tabela de dados. O primeiro passo é selecionar um ano.
+
+Em JavaScript, utilizamos a instrução de filtro.
+
+```{ojs}
+data2020 = data.filter(d => d.year == 2020)
+Inputs.table(data2020)
+```
+
+::: callout-tip
+Manipular uma matriz de dados em JavaScript quando se está habituado a fazê-lo em R pode ser confuso. Mas é possível usar a biblioteca arquero, que é muito semelhante ao `dplyr`.
+:::
+
+Para efetuar a junção, utilizamos a instrução `viz.tool.merge()`.
+
+```{ojs}
+jointure = viz.tool.merge({geom: world, geom_id: "ISO3", data: data2020, data_id:"id"})
+```
+
+A função devolve o resultado da junção, bem como um diagnóstico para avaliar a qualidade da junção.
+
+```{ojs}
+jointure 
+```
+
+O novo mapa de fundo é, por conseguinte, :
+
+```{ojs}
+world2020 = jointure.featureCollection
+```
+
+## Os Símbolos proporcionais
+
+Para representar dados quantitativos absolutos, utilizamos símbolos na cartografia que variam proporcionalmente. Para o fazer, utilize a função `viz.plot()` com `type: “prop”` . É um pouco como usar `r::mapsf`.
+
+O mapa pode ser desenhado da seguinte forma :
+
+```{ojs}
+{
+let svg = viz.create({width: 790, domain: world2020})
+svg.plot({type: "base", data: world2020, fill: "#CCC"})
+svg.plot({type: "prop", data: world2020, var: "pop", fill:"#d47988", leg_pos:[10, 200]})
+return svg.render()
+} 
+```
+
+5.3. Tipologias Para criar tipologias, utilizamos também a função `plot()` com `type: "typo"`.
+
+```{ojs}
+{
+let svg = viz.create({width: 790, domain: world2020})
+svg.plot({type: "typo", data: world2020, var: "region", leg_pos:[10, 100]})
+return svg.render()
+} 
+```
+
+Estão disponíveis várias paletas de cores em dicopal.
+
+## Mapa coroplético
+
+Para criar um mapa coroplético, utilize o comando `type: "choro"`
+
+```{ojs}
+{
+let svg = viz.create({width: 790, domain: world2020})
+svg.plot({type: "choro", data: world2020, var: "gdppc", leg_pos:[10, 100]})
+return svg.render()
+}
+```
+
+Com `method`, pode alterar o método de discretização: “quantile”, “q6”, “equal”, “jenks”, “msd”, “geometric”, “headtail”, “pretty”, “arithmetic” ou “nestedmeans”.
+
+Com `nb`, pode alterar o número de classes.
+
+Utilize `colors` para alterar a paleta.
+
+## Combinações
+
+Com os tipos “propchoro” e “proptypo”, é possível criar combinações gráficas.
+
+```{ojs}
+{
+let svg = viz.create({width: 790, domain: world2020})
+svg.plot({type: "propchoro", data: world2020, var1: "pop", var2: "gdppc"})
+return svg.render()
+}
+```
+
+## Tudo é personalizável/configurável
+
+Lembre-se também que estamos num ambiente reativo e que pode propor interacções para modificar o mapa.
+
+Por exemplo, é possível
+
+```{ojs}
+viewof title = Inputs.textarea({label: "Título do mapa", placeholder: "Título..."})
+viewof k = Inputs.range([10, 70], {step: 1, label: "Raio do maior cícrculo"})
+viewof toggle = Inputs.toggle({label: "Afastar os círculos ?", value: false})
+```
+
+```{ojs}
+{
+let svg = viz.create({width:790, domain: world2020})
+svg.path({datum: world2020, fill:"#CCC"})
+svg.plot({type:"prop", data: world2020, var: "pop", k:k, fill:"#e02d51", dodge: toggle, leg_pos:[10, 200] })
+svg.header({text: title })
+return svg.render()
+}
+```
+
+Tudo é completamente personalizável.
+
+```{ojs}
+{
+  let svg = viz.create({ projection: d3.geoOrthographic().rotate([-50,-50]), zoomable: "versor", width:790 });
+  svg.plot({ type: "outline", fill: svg.effect.radialGradient() });
+  svg.plot({
+    type: "graticule",
+    stroke: "white",
+    step: 40,
+    strokeWidth: 2,
+    strokeOpacity: 0.3
+  });
+  svg.plot({ type: "typo", data: world2020, var: "region", stroke: "none", legend: false });
+  svg.plot({
+    type: "prop",
+    symbol: "square",
+    data: world2020,
+    var: "pop",
+    fill: "red",
+    fillOpacity:0.8,
+    leg_type: "nested",
+    leg_values_factor: 1 / 1000000,
+    leg_pos: [20, 20],
+    leg_frame:true,
+    leg_title: "Número de habitantes",
+    leg_subtitle: "(em miliões)",
+    tip: `$name ($ISO3)`,
+    tipstyle: {
+    fontSize: 20,
+    fill: "white",
+    background: "#38896F",
+  }
+  });
+  return svg.render();
+}
+```
+
+# Criar um mapa animado
+
+Importamos um widget da plataforma do bloco de notas Observable.
+
+```{ojs}
+import {Scrubber} from "@mbostock/scrubber"
+```
+
+A seguir, criamos o mapa
+
+```{ojs}
+viewof anos = Scrubber(d3.range(1960,2023), {autoplay: false})
+// Tri des données
+mydata = data.filter(d => d.year == anos)
+mybasemap = viz.tool.merge({geom: world, geom_id: "ISO3", data: mydata, data_id:"id"}).featureCollection
+// Carte
+{
+  let svg = viz.create({width:790, projection: d3.geoBertin1953()})
+  svg.outline()
+  svg.graticule({stroke: "white", step: 40})
+  svg.path({datum: world, fill:"white", fillOpacity:0.3})
+  svg.header({text: `População em ${anos}`})
+  svg.plot({type:"prop", data: mybasemap,  var: "pop", fill:"red", fixmax: 1417173173, tip:`$name\n$pop`})
+  return svg.render()
+}
+```
+
+# Ir mais longe
+
+## Dashboards
+
+Desde a versão 1.4, Quarto oferece layouts de página no estilo dashboard. Tudo o que vimos acima pode, portanto, ser facilmente usado para criar uma aplicação completa. Alguns exemplos estão disponíveis no site da Quarto.
+
+1.  Documentação Quarto : quarto.org/docs/dashboards
+
+## **Exemplos de mapas realizados com `geoviz`**
+
+-   [Night and Day](https://observablehq.com/@neocartocnrs/night-and-day "Night and Day by Observable")
+
+-   [Charging points in Paris](https://observablehq.com/@neocartocnrs/charging-points-for-electric-vehicles-in-paris "Charging points in Paris by Observable")
+
+-   [Electricity map \[FR\]](https://observablehq.com/@neocartocnrs/electricity-map "Electricity map [FR] by Observable")
+
+-   [OQT & expulsions \[FR\]](https://observablehq.com/@neocartocnrs/migreurop-explusions-et-oqt "OQT & expulsions [FR] by Observable")
+
+-   [Regular grids](https://observablehq.com/@neocartocnrs/bees "Regular grids by Observable")
+
+-   [International migration \[FR\]](https://observablehq.com/@neocartocnrs/migrexplorer "International migration [FR] by Observable")
