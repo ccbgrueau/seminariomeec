@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introdução a cartografia para a Web com o quarto</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="observable_files/libs/clipboard/clipboard.min.js"></script>
+<script src="observable_files/libs/quarto-html/quarto.js"></script>
+<script src="observable_files/libs/quarto-html/popper.min.js"></script>
+<script src="observable_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="observable_files/libs/quarto-html/anchor.min.js"></script>
+<link href="observable_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="observable_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="observable_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="observable_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="observable_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script type="module" src="observable_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="observable_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#a-web" id="toc-a-web" class="nav-link active" data-scroll-target="#a-web"><span class="header-section-number">1</span> A Web 🕸️</a>
+  <ul class="collapse">
+  <li><a href="#internet-e-www" id="toc-internet-e-www" class="nav-link" data-scroll-target="#internet-e-www"><span class="header-section-number">1.1</span> Internet e WWW</a></li>
+  <li><a href="#linguagens-para-a-web" id="toc-linguagens-para-a-web" class="nav-link" data-scroll-target="#linguagens-para-a-web"><span class="header-section-number">1.2</span> Linguagens para a Web</a>
+  <ul class="collapse">
+  <li><a href="#html" id="toc-html" class="nav-link" data-scroll-target="#html">HTML</a></li>
+  <li><a href="#css" id="toc-css" class="nav-link" data-scroll-target="#css">CSS</a></li>
+  <li><a href="#canvas" id="toc-canvas" class="nav-link" data-scroll-target="#canvas">Canvas</a></li>
+  <li><a href="#svg" id="toc-svg" class="nav-link" data-scroll-target="#svg">SVG</a></li>
+  <li><a href="#javascript" id="toc-javascript" class="nav-link" data-scroll-target="#javascript">JavaScript</a></li>
+  </ul></li>
+  <li><a href="#javascript-1" id="toc-javascript-1" class="nav-link" data-scroll-target="#javascript-1"><span class="header-section-number">1.3</span> JavaScript</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">1995</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">1997</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">2008</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3">2009</a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4">2015</a></li>
+  <li><a href="#amanhã" id="toc-amanhã" class="nav-link" data-scroll-target="#amanhã">Amanhã?</a></li>
+  <li><a href="#uma-grande-comunidade" id="toc-uma-grande-comunidade" class="nav-link" data-scroll-target="#uma-grande-comunidade">Uma grande comunidade</a></li>
+  <li><a href="#mas-incontornável-e-promissora" id="toc-mas-incontornável-e-promissora" class="nav-link" data-scroll-target="#mas-incontornável-e-promissora">Mas incontornável e promissora</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#observable-javascript" id="toc-observable-javascript" class="nav-link" data-scroll-target="#observable-javascript"><span class="header-section-number">2</span> Observable Javascript 📊</a>
+  <ul class="collapse">
+  <li><a href="#o-que-é-o-observable" id="toc-o-que-é-o-observable" class="nav-link" data-scroll-target="#o-que-é-o-observable"><span class="header-section-number">2.1</span> O que é o Observable?</a>
+  <ul class="collapse">
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul></li>
+  <li><a href="#observable-notebooks" id="toc-observable-notebooks" class="nav-link" data-scroll-target="#observable-notebooks"><span class="header-section-number">2.2</span> Observable notebooks</a></li>
+  <li><a href="#observable-framework" id="toc-observable-framework" class="nav-link" data-scroll-target="#observable-framework"><span class="header-section-number">2.3</span> Observable framework</a></li>
+  <li><a href="#observable-em-quarto" id="toc-observable-em-quarto" class="nav-link" data-scroll-target="#observable-em-quarto"><span class="header-section-number">2.4</span> Observable em Quarto</a></li>
+  <li><a href="#javascript-ojs" id="toc-javascript-ojs" class="nav-link" data-scroll-target="#javascript-ojs"><span class="header-section-number">2.5</span> JavaScript ≠ ojs</a></li>
+  <li><a href="#as-células-chunk-ojs" id="toc-as-células-chunk-ojs" class="nav-link" data-scroll-target="#as-células-chunk-ojs"><span class="header-section-number">2.6</span> As células / chunk {ojs}</a></li>
+  <li><a href="#inputs-entradas" id="toc-inputs-entradas" class="nav-link" data-scroll-target="#inputs-entradas"><span class="header-section-number">2.7</span> Inputs / Entradas</a>
+  <ul class="collapse">
+  <li><a href="#button" id="toc-button" class="nav-link" data-scroll-target="#button">👉 button</a></li>
+  <li><a href="#toogle" id="toc-toogle" class="nav-link" data-scroll-target="#toogle">👉 toogle</a></li>
+  <li><a href="#range" id="toc-range" class="nav-link" data-scroll-target="#range">👉 range</a></li>
+  <li><a href="#checkbox" id="toc-checkbox" class="nav-link" data-scroll-target="#checkbox">👉 checkbox</a></li>
+  <li><a href="#radio" id="toc-radio" class="nav-link" data-scroll-target="#radio">👉 radio</a></li>
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select">👉 select</a></li>
+  <li><a href="#text" id="toc-text" class="nav-link" data-scroll-target="#text">👉 text</a></li>
+  <li><a href="#textarea" id="toc-textarea" class="nav-link" data-scroll-target="#textarea">👉 textarea</a></li>
+  <li><a href="#date" id="toc-date" class="nav-link" data-scroll-target="#date">👉 date</a></li>
+  <li><a href="#color" id="toc-color" class="nav-link" data-scroll-target="#color">👉 color</a></li>
+  <li><a href="#file" id="toc-file" class="nav-link" data-scroll-target="#file">👉 file</a></li>
+  <li><a href="#formulário" id="toc-formulário" class="nav-link" data-scroll-target="#formulário">👉 formulário</a></li>
+  </ul></li>
+  <li><a href="#tudo-é-reativo" id="toc-tudo-é-reativo" class="nav-link" data-scroll-target="#tudo-é-reativo"><span class="header-section-number">2.8</span> Tudo é reativo 🔥</a></li>
+  <li><a href="#os-dados" id="toc-os-dados" class="nav-link" data-scroll-target="#os-dados"><span class="header-section-number">2.9</span> Os dados</a>
+  <ul class="collapse">
+  <li><a href="#ficheiro-csv" id="toc-ficheiro-csv" class="nav-link" data-scroll-target="#ficheiro-csv">👉 ficheiro csv</a></li>
+  <li><a href="#ficheiro-xlsx" id="toc-ficheiro-xlsx" class="nav-link" data-scroll-target="#ficheiro-xlsx">👉 ficheiro xlsx</a></li>
+  <li><a href="#apresentação-dos-dados" id="toc-apresentação-dos-dados" class="nav-link" data-scroll-target="#apresentação-dos-dados">👉 Apresentação dos dados</a></li>
+  <li><a href="#ficheiro-geojson" id="toc-ficheiro-geojson" class="nav-link" data-scroll-target="#ficheiro-geojson">👉 ficheiro geoJSON</a></li>
+  </ul></li>
+  <li><a href="#bibliotecas-externas" id="toc-bibliotecas-externas" class="nav-link" data-scroll-target="#bibliotecas-externas"><span class="header-section-number">2.10</span> Bibliotecas externas</a></li>
+  <li><a href="#importações" id="toc-importações" class="nav-link" data-scroll-target="#importações"><span class="header-section-number">2.11</span> Importações</a></li>
+  </ul></li>
+  <li><a href="#trabalhos-práticos-lets-go" id="toc-trabalhos-práticos-lets-go" class="nav-link" data-scroll-target="#trabalhos-práticos-lets-go"><span class="header-section-number">3</span> Trabalhos práticos 👉 let’s go</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introdução a cartografia para a Web com o quarto</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="a-web" class="level1" data-background-color="#40666e" data-number="1">
+<h1 data-background-color="#40666e" data-number="1"><span class="header-section-number">1</span> A Web 🕸️</h1>
+<section id="internet-e-www" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="internet-e-www"><span class="header-section-number">1.1</span> Internet e WWW</h2>
+<p>A Internet nasceu de uma iniciativa militar americana. O primeiro nó da rede ARPANET (Advanced Research Project Agency Network), que deu origem à Internet, foi criado em 1969.</p>
+<p><img src="img/arpanet.webp" class="img-fluid"></p>
+<p>12 de março de 1989 : primeira versão da Web - Tim Berners-Lee, um investigador britânico do CERN, inventou a WWW.</p>
+<p><img src="img/berneers-lee.jpeg" class="img-fluid"></p>
+<p>O projeto, inicialmente designado por “World Wide Web”, foi concebido e desenvolvido para que os cientistas que trabalham em universidades e institutos de todo o mundo pudessem trocar informações instantaneamente.</p>
+<p><img src="img/www.png" class="img-fluid"></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Web ou Internet ?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A Internet é uma plataforma de envio de informações de um computador para outro. A Web, por seu lado, é um meio de visitar páginas de sítios a partir de navegadores através de computadores, tablets ou smartphones.</p>
+</div>
+</div>
+<p>1991 - A Web é aberta a todos.</p>
+<p>Em 1993, a tecnologia torna-se pública. A utilização da Web explodiu rapidamente na Internet.</p>
+<p>No final de 1994, o número de servidores Web atingiu os 10.000!</p>
+<p>O lançamento do Netscape, o primeiro navegador verdadeiramente comercializado em massa, também desempenhou um papel importante na sua democratização.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/netscape.webp" class="img-fluid figure-img"></p>
+<figcaption>Netscape</figcaption>
+</figure>
+</div>
+<p>janeiro de 1994: Yahoo!</p>
+<p>O número de sites estava a explodir, ao ponto de se tornar muito difícil para os utilizadores novatos da Internet orientarem-se. Dois estudantes de Stanford, Jerry Yang e David Filo, decidiram criar um gigantesco diretório de sítios, classificados por temas. Rapidamente se tornou o portal número 1 da Web.</p>
+<p><img src="img/yahoo.webp" class="img-fluid"></p>
+<p>1998 O Google lança o seu motor de pesquisa</p>
+<p><img src="img/google.webp" class="img-fluid"></p>
+<p>2010: o surgimento do HTML5, o futuro da Web</p>
+<p><img src="img/html5.png" class="img-fluid"></p>
+<p>25 anos após a sua invenção, o HTML está a sofrer uma ligeira revolução, ainda sob o impulso de Tim Berners-Lee. Graças à quinta versão da norma de marcação de páginas Web - e a uma série de tecnologias associadas - estão a surgir novos serviços. O objetivo desta norma é transformar as páginas Web, ainda demasiado estáticas, em verdadeiros programas informáticos, que não estariam à altura das aplicações dos smartphones ou dos programas que instala no seu computador. E fazer do navegador a única aplicação de que necessitará.</p>
+<p>Atualmente</p>
+<p>Mais de 4 mil milhões de utilizadores</p>
+<p><img src="img/4billions.jpeg" class="img-fluid"></p>
+</section>
+<section id="linguagens-para-a-web" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="linguagens-para-a-web"><span class="header-section-number">1.2</span> Linguagens para a Web</h2>
+<p>Por detrás da Web, existem linguagens informáticas que são interpretadas diretamente nos navegadores.</p>
+<p><img src="img/html-css-js.png" class="img-fluid"></p>
+<section id="html" class="level3">
+<h3 class="anchored" data-anchor-id="html">HTML</h3>
+<p>A HyperText Markup Language, geralmente abreviada HTML, é o esqueleto de uma página Web. É a estrutura do documento. O HTML é estruturado através de etiquetas.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>Page Title<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="dt">&gt;</span>This is a Heading<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>This is a paragraph.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="css" class="level3">
+<h3 class="anchored" data-anchor-id="css">CSS</h3>
+<p>As folhas de estilo em cascata (CSS) são uma linguagem informática que descreve a apresentação de documentos HTML. As CSS definem o estilo e o posicionamento dos elementos na página.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">background-color</span><span class="ch">:</span> <span class="cn">lightblue</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>h1 {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="cn">white</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">text-align</span><span class="ch">:</span> <span class="dv">center</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>p {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span><span class="ch">:</span> <span class="dv">verdana</span><span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-size</span><span class="ch">:</span> <span class="dv">20</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="canvas" class="level3">
+<h3 class="anchored" data-anchor-id="canvas">Canvas</h3>
+<p>Desde o HTML5, é possível desenhar diretamente no navegador Web. Com o Canvas em modo raster (pixéis)</p>
+<p>Este código</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">canvas</span><span class="ot"> id</span><span class="op">=</span><span class="st">"myCanvas2"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100"</span><span class="ot"> height </span><span class="op">=</span><span class="st">"100"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"border:1px</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">solid #000000; background-color: steelblue;"</span><span class="dt">&gt;&lt;/</span><span class="kw">canvas</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>resulta em :</p>
+<canvas id="myCanvas2" width="100" height="100" style="border:1px
+solid #000000; background-color: steelblue;"></canvas>
+</section>
+<section id="svg" class="level3">
+<h3 class="anchored" data-anchor-id="svg">SVG</h3>
+<p>SVG (Scalable Vetor Graphics) é um formato de dados concebido para descrever conjuntos de gráficos vectoriais. É o formato utilizado no Inkscape.</p>
+<p>Este código::</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> viewBox</span><span class="op">=</span><span class="st">"0 0 1000 100"</span><span class="ot"> xmlns</span><span class="op">=</span><span class="st">"http://www.w3.org/2000/svg"</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">rect</span><span class="ot"> x</span><span class="op">=</span><span class="st">"0"</span><span class="ot"> y</span><span class="op">=</span><span class="st">"0"</span><span class="ot"> width</span><span class="op">=</span><span class="st">"100px"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"100px"</span><span class="ot"> fill</span><span class="op">=</span><span class="st">"#F2CD3B"</span><span class="ot"> stroke</span><span class="op">=</span><span class="st">"#06000C"</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>resulta nisso :</p>
+<svg viewbox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="100px" height="100px" fill="#F2CD3B" stroke="#06000C"></rect>
+</svg>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As coordenadas [0,0] estão no canto superior esquerdo.</p>
+</div>
+</div>
+<p><img src="img/reference-system.png" class="img-fluid"></p>
+</section>
+<section id="javascript" class="level3">
+<h3 class="anchored" data-anchor-id="javascript">JavaScript</h3>
+<p>Esta é a linguagem de script do browser.</p>
+<p><img src="img/js.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="javascript-1" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="javascript-1"><span class="header-section-number">1.3</span> JavaScript</h2>
+<p>O JavaScript é uma linguagem de programação com quase 30 anos.</p>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section">1995</h3>
+<p><img src="img/js.png" class="img-fluid" style="width:15.0%"></p>
+<p>A linguagem Javascript foi criada em dez dias, em maio de 1995, por Brendan Eich, para a Netscape Communications Corporation. Inicialmente, a ideia era construir uma pequena linguagem para interação em páginas Web. Note-se que Javascript não é JAVA!</p>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1">1997</h3>
+<p><img src="img/ecma.png" class="img-fluid"></p>
+<p>A linguagem Javascript é normalizada desde 1997 pela comissão TC39 da ECMA International.</p>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2">2008</h3>
+<p>Os navegadores Web têm vindo a trabalhar em novos motores para melhorar o desempenho. O <strong>V8</strong> é um motor JavaScript de código aberto desenvolvido pelo projeto Chromium para os navegadores Web Google Chrome e Chromium (última versão em 31 de janeiro de 2022). Existe também o <strong>SpiderMonkey</strong> para o Firefox, o <strong>Chakra</strong> para o Microsoft Edge e o <strong>JavaScriptCore</strong> para o Safari.</p>
+</section>
+<section id="section-3" class="level3">
+<h3 class="anchored" data-anchor-id="section-3">2009</h3>
+<p><img src="img/node.png" class="img-fluid"></p>
+<p>Criação do Node.js por <strong>Ryan Dahl</strong>, que permite a utilização do JavaScript como linguagem de programação back-end.</p>
+</section>
+<section id="section-4" class="level3">
+<h3 class="anchored" data-anchor-id="section-4">2015</h3>
+<p>Desde 2015 (ES6 ou ES2015), a linguagem JavaScript amadureceu. Tem um bom desempenho. E é implementada de forma harmonizada em todos os browsers. Estamos a falar de <em>JavaScript moderno</em></p>
+</section>
+<section id="amanhã" class="level3">
+<h3 class="anchored" data-anchor-id="amanhã">Amanhã?</h3>
+<p>Todos os anos são adicionadas novas funcionalidades à linguagem.</p>
+<p>Ver : observablehq.com/<span class="citation" data-cites="robertbatty/ecmascript-2015-2022">@robertbatty/ecmascript-2015-2022</span></p>
+</section>
+<section id="uma-grande-comunidade" class="level3">
+<h3 class="anchored" data-anchor-id="uma-grande-comunidade">Uma grande comunidade</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img src="img/programming-languages.png" class="img-fluid"></p>
+</div><div class="column" style="width:50%;">
+<p><img src="img/npm-packages.png" class="img-fluid">Right column</p>
+</div>
+</div>
+<p>O JavaScript é uma linguagem antiga com uma comunidade muito grande.</p>
+<p>O JavaScript é atualmente uma das linguagens mais utilizadas pelos programadores de computadores.</p>
+<p>Existem atualmente mais de 2 milhões de pacotes disponíveis no npm.</p>
+<p>JavaScript permite-lhe desenhar no browser</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">500</span><span class="op">,</span> <span class="dv">60</span>])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background-color"</span><span class="op">,</span> <span class="st">"#CCC"</span>)<span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  svg</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cx"</span><span class="op">,</span> <span class="dv">50</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cy"</span><span class="op">,</span> <span class="dv">30</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"r"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#e04a28"</span>)<span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" data-startfrom="271" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 270;"><span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3</span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">500</span><span class="op">,</span> <span class="dv">60</span>])</span>
+<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background-color"</span><span class="op">,</span> <span class="st">"#CCC"</span>)<span class="op">;</span></span>
+<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a>  svg</span>
+<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cx"</span><span class="op">,</span> <span class="dv">50</span>)</span>
+<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cy"</span><span class="op">,</span> <span class="dv">30</span>)</span>
+<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"r"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#e04a28"</span>)<span class="op">;</span></span>
+<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>JavaScript não foi concebido para a análise de dados. Por exemplo, a operação de ordenação predefinida ordena os valores por ordem alfabética.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>{ <span class="kw">let</span> a <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">9</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">10</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span><span class="op">,</span><span class="dv">6</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">8</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> a<span class="op">.</span><span class="fu">sort</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" data-startfrom="298" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 297;"><span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a>{ <span class="kw">let</span> a <span class="op">=</span> [<span class="dv">7</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">9</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">10</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span><span class="op">,</span><span class="dv">6</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">8</span>]</span>
+<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> a<span class="op">.</span><span class="fu">sort</span>()</span>
+<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="mas-incontornável-e-promissora" class="level3">
+<h3 class="anchored" data-anchor-id="mas-incontornável-e-promissora">Mas incontornável e promissora</h3>
+<ul>
+<li>É a linguagem da Web</li>
+<li>Grande comunidade</li>
+<li>Linguagem cada vez mais poderosa</li>
+<li>Já existem muitas bibliotecas</li>
+</ul>
+<p>Por isso, algumas pessoas pensam que o JavaScript é a linguagem do futuro para o processamento e análise de dados.</p>
+<p><img src="img/twit.png" class="img-fluid"></p>
+<p><a href="https://towardsdatascience.com/javascript-for-data-analysis-2e8e7dbf63a7" class="uri">https://towardsdatascience.com/javascript-for-data-analysis-2e8e7dbf63a7</a></p>
+</section>
+</section>
+</section>
+<section id="observable-javascript" class="level1" data-background-color="#40666e" data-number="2">
+<h1 data-background-color="#40666e" data-number="2"><span class="header-section-number">2</span> Observable Javascript 📊</h1>
+<p>Uma linguagem dedicada à visualização de dados para a Web</p>
+<section id="o-que-é-o-observable" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="o-que-é-o-observable"><span class="header-section-number">2.1</span> O que é o Observable?</h2>
+<p><strong>Observable javascript (ojs)</strong> é um conjunto de melhorias ao JavaScript criado por Mike Bostock (também autor do D3). O Observable JS destaca-se pela sua execução reactiva, que é particularmente adequada para a exploração e análise interactiva de dados. O objetivo é fazer com que uma comunidade trabalhe em conjunto em torno da visualização de dados.</p>
+<p><img src="img/observable-timeline.png" class="img-fluid"></p>
+<p><strong>Observable</strong> é também uma start-up fundada por Mike Bostock e Melody Meckfessel, que oferece uma plataforma 100% online para conceber, partilhar e distribuir visualizações de dados.</p>
+<p><img src="img/observable-logo.png" class="img-fluid" width="50"></p>
+<p>É também uma <strong>plataforma Web</strong> disponível em <a href="https://observablehq.com/" class="uri">https://observablehq.com/</a> que aloja <strong><em>cadernos de notas computacionais</em></strong> sobre visualização de dados.</p>
+<p>Os cadernos de notas são como publicações em blogues. Contêm texto, imagens e conteúdos multimédia. Podem ser organizados em colecções. Estão disponíveis em linha através de um URL. Como seria de esperar, também contêm linhas de código. O objetivo: programação letrada (<strong>literate programming</strong>).</p>
+<p><img src="img/observable-samples.png" class="img-fluid"></p>
+<section id="referências" class="level3">
+<h3 class="anchored" data-anchor-id="referências">Referências</h3>
+<ul>
+<li><p>Reactive, reproducible, collaborative: computational notebooks evolve, par Jeffrey M. Perkel. https://www.nature.com/articles/d41586-021-01174-w</p></li>
+<li><p>Javascript for data Analysis, par Mike Bostock https://towardsdatascience.com/javascript-for-data-analysis-2e8e7dbf63a7</p></li>
+</ul>
+</section>
+</section>
+<section id="observable-notebooks" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="observable-notebooks"><span class="header-section-number">2.2</span> Observable notebooks</h2>
+<p>Cadernos de notas observáveis Os blocos de notas observáveis permitem-lhe trabalhar em linha, diretamente no seu navegador, sem necessidade de instalar qualquer software. Naturalmente, é necessária uma boa ligação à Internet.</p>
+<p><img src="img/notebooks.png" class="img-fluid"></p>
+<p>Por exemplo : <a href="https://observablehq.com/trendings">https://observablehq.com/trending</a></p>
+</section>
+<section id="observable-framework" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="observable-framework"><span class="header-section-number">2.3</span> Observable framework</h2>
+<p>Este ano, a Observable lançou uma nova ferramenta designada por Observable Framework.</p>
+<p><img src="img/observable-framework.png" class="img-fluid"></p>
+</section>
+<section id="observable-em-quarto" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="observable-em-quarto"><span class="header-section-number">2.4</span> Observable em Quarto</h2>
+<p><img src="img/quarto-logo.png" class="img-fluid" style="width:20.0%"></p>
+<p>Quarto é um ecosistema de publicação que pode ser utilizado para criar documentos markdown, artigos, relatórios, apresentações, sítios Web, blogues e livros em HTML, PDF, Word, ePub e outros formatos.</p>
+<p>Permite-lhe criar conteúdos dinâmicos em diferentes linguagens: <strong>Python</strong>, <strong>R</strong>, <strong>Julia</strong> e <strong>Observable JavaScript</strong>.</p>
+<p>Isto torna possível criar documentos, relatórios e análises totalmente reproduzíveis.</p>
+<p><img src="img/quarto-exemplo.png" class="img-fluid"></p>
+</section>
+<section id="javascript-ojs" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="javascript-ojs"><span class="header-section-number">2.5</span> JavaScript ≠ ojs</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>OJS é JavaScript + muitas bibliotecas pré-carregadas:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Symbol</strong></th>
+<th style="text-align: left;"><strong>Name</strong></th>
+<th style="text-align: left;"><strong>Version</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">_</td>
+<td style="text-align: left;">Lodash</td>
+<td style="text-align: left;">4.17.21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">aq</td>
+<td style="text-align: left;">Arquero</td>
+<td style="text-align: left;">4.8.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arrow</td>
+<td style="text-align: left;">Apache Arrow</td>
+<td style="text-align: left;">4.0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">d3</td>
+<td style="text-align: left;">D3.js</td>
+<td style="text-align: left;">7.8.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dot</td>
+<td style="text-align: left;">Graphviz</td>
+<td style="text-align: left;">0.2.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">htl</td>
+<td style="text-align: left;">Hypertext Literal</td>
+<td style="text-align: left;">0.3.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Inputs</td>
+<td style="text-align: left;">Observable Inputs</td>
+<td style="text-align: left;">0.10.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">L</td>
+<td style="text-align: left;">Leaflet</td>
+<td style="text-align: left;">1.9.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mermaid</td>
+<td style="text-align: left;">Mermaid</td>
+<td style="text-align: left;">9.1.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Plot</td>
+<td style="text-align: left;">Observable Plot</td>
+<td style="text-align: left;">0.6.11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SQLite</td>
+<td style="text-align: left;">SQL.js</td>
+<td style="text-align: left;">1.7.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">topojson</td>
+<td style="text-align: left;">TopoJSON Client</td>
+<td style="text-align: left;">3.1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">vl</td>
+<td style="text-align: left;">Vega, Vega-Lite</td>
+<td style="text-align: left;">5.22.1, 5.2.0</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:60%;">
+<p>O OJS é também uma evolução da linguagem javascript para a tornar adequada à análise e apresentação de dados na Web.</p>
+<p><img src="img/ojs-libraries.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="as-células-chunk-ojs" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="as-células-chunk-ojs"><span class="header-section-number">2.6</span> As células / chunk {ojs}</h2>
+<p>Em Quarto, é possível escrever/executar código Observável usando {ojs} chunks.</p>
+<p>Cada linha define uma variável e uma célula que deve ser única.</p>
+<p>célula 1 :</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">5</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>célula 2 :</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">7</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>célula 3 :</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">+</span> b</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>12</code></pre>
+<p>Com o <strong>ojs</strong>, a ordem de escrita não importa 🤔 Por isso, podemos escrever :</p>
+<p>Isto :</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">*</span> d</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dv">24</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Antes disso</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="dv">3</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>e isso</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="dv">8</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A razão é que a relação entre as células é topológica.</p>
+<p><img src="img/ojs-topology.png" class="img-fluid"></p>
+<p>Cada célula deve ser única. Por conseguinte, não é permitido redefinir nenhuma destas variáveis.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode java code-with-copy"><code class="sourceCode java"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> <span class="dv">5</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>OJS Runtime Error</p>
+<p>e is defined more than once</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>OJS Runtime Error</p>
+<p>e is defined more than once</p>
+</div>
+</div>
+</div>
+<p>Por conseguinte, é frequentemente útil criar blocos de código com <code>{...}</code> quando o processamento se torna mais complexo.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> val1 <span class="op">=</span> <span class="dv">8</span><span class="op">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> val2 <span class="op">=</span> <span class="dv">7</span><span class="op">;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  val1 <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> val1 <span class="op">*</span> val2<span class="op">;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="shell"><code>35</code></pre>
+<p>Mas, na maioria das vezes, para fazer este tipo de cálculo, escrevemos funções. Assim:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">sum</span>(a<span class="op">,</span> b) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">// chamada da função</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="dv">10</span><span class="op">,</span> <span class="dv">30</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dv">40</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Ou desta forma :</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>multi <span class="op">=</span> (a<span class="op">,</span> b) <span class="kw">=&gt;</span> a <span class="op">*</span> b</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Chamada à função</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">multi</span>(<span class="dv">3</span><span class="op">,</span> <span class="dv">8</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="javscript"><code>24</code></pre>
+<p>Esta abordagem pode ser desconcertante. Mas tem uma grande vantagem. Permite-lhe organizar um documento independentemente da forma como o codifica. Por exemplo, pode colocar um mapa no topo da página e o código que o gera num apêndice técnico na parte inferior.</p>
+</section>
+<section id="inputs-entradas" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="inputs-entradas"><span class="header-section-number">2.7</span> Inputs / Entradas</h2>
+<p><strong>Observable</strong> fornece <em>inputs</em> prontos a utilizar.</p>
+<section id="button" class="level3">
+<h3 class="anchored" data-anchor-id="button">👉 button</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>viewof clicks <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Click"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>clicks</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" data-startfrom="543" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 542;"><span id="cb25-543"><a href="#cb25-543" aria-hidden="true" tabindex="-1"></a>viewof clicks <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Click"</span>)</span>
+<span id="cb25-544"><a href="#cb25-544" aria-hidden="true" tabindex="-1"></a>clicks</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="toogle" class="level3">
+<h3 class="anchored" data-anchor-id="toogle">👉 toogle</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>viewof mute <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Mute"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="kw">true</span>})</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>mute</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" data-startfrom="555" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 554;"><span id="cb27-555"><a href="#cb27-555" aria-hidden="true" tabindex="-1"></a>viewof mute <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">toggle</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"Mute"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="kw">true</span>})</span>
+<span id="cb27-556"><a href="#cb27-556" aria-hidden="true" tabindex="-1"></a>mute</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="range" class="level3">
+<h3 class="anchored" data-anchor-id="range">👉 range</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>viewof gain <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">11</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Gain"</span>})</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>gain</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" data-startfrom="567" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 566;"><span id="cb29-567"><a href="#cb29-567" aria-hidden="true" tabindex="-1"></a>viewof gain <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">11</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Gain"</span>})</span>
+<span id="cb29-568"><a href="#cb29-568" aria-hidden="true" tabindex="-1"></a>gain</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="checkbox" class="level3">
+<h3 class="anchored" data-anchor-id="checkbox">👉 checkbox</h3>
+<div class="sourceCode" id="cb30"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>viewof colors <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">checkbox</span>([<span class="st">"red"</span><span class="op">,</span> <span class="st">"green"</span><span class="op">,</span> <span class="st">"blue"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"color"</span>})</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>colors</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" data-startfrom="579" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 578;"><span id="cb31-579"><a href="#cb31-579" aria-hidden="true" tabindex="-1"></a>viewof colors <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">checkbox</span>([<span class="st">"red"</span><span class="op">,</span> <span class="st">"green"</span><span class="op">,</span> <span class="st">"blue"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"color"</span>})</span>
+<span id="cb31-580"><a href="#cb31-580" aria-hidden="true" tabindex="-1"></a>colors</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-6-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="radio" class="level3">
+<h3 class="anchored" data-anchor-id="radio">👉 radio</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>viewof color <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"red"</span><span class="op">,</span> <span class="st">"green"</span><span class="op">,</span> <span class="st">"blue"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"color"</span>})</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>color</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33" data-startfrom="591" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 590;"><span id="cb33-591"><a href="#cb33-591" aria-hidden="true" tabindex="-1"></a>viewof color <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"red"</span><span class="op">,</span> <span class="st">"green"</span><span class="op">,</span> <span class="st">"blue"</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"color"</span>})</span>
+<span id="cb33-592"><a href="#cb33-592" aria-hidden="true" tabindex="-1"></a>color</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-7-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-7-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="select" class="level3">
+<h3 class="anchored" data-anchor-id="select">👉 select</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>cidades <span class="op">=</span> [<span class="st">"Coimbra"</span><span class="op">,</span> <span class="st">"Faro"</span><span class="op">,</span> <span class="st">"Braga"</span>]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>viewof minhacidade <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(cidades<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">"steelblue"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Escolhe uma cidade"</span>})</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>minhacidade</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35" data-startfrom="604" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 603;"><span id="cb35-604"><a href="#cb35-604" aria-hidden="true" tabindex="-1"></a>cidades <span class="op">=</span> [<span class="st">"Coimbra"</span><span class="op">,</span> <span class="st">"Faro"</span><span class="op">,</span> <span class="st">"Braga"</span>]</span>
+<span id="cb35-605"><a href="#cb35-605" aria-hidden="true" tabindex="-1"></a>viewof minhacidade <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(cidades<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">"steelblue"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Escolhe uma cidade"</span>})</span>
+<span id="cb35-606"><a href="#cb35-606" aria-hidden="true" tabindex="-1"></a>minhacidade</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-8-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-8-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-8-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="text" class="level3">
+<h3 class="anchored" data-anchor-id="text">👉 text</h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>viewof text <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">text</span>()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>text</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37" data-startfrom="617" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 616;"><span id="cb37-617"><a href="#cb37-617" aria-hidden="true" tabindex="-1"></a>viewof text <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">text</span>()</span>
+<span id="cb37-618"><a href="#cb37-618" aria-hidden="true" tabindex="-1"></a>text</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-9-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="textarea" class="level3">
+<h3 class="anchored" data-anchor-id="textarea">👉 textarea</h3>
+<div class="sourceCode" id="cb38"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>viewof textarea <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">textarea</span>()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>textarea</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39" data-startfrom="629" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 628;"><span id="cb39-629"><a href="#cb39-629" aria-hidden="true" tabindex="-1"></a>viewof textarea <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">textarea</span>()</span>
+<span id="cb39-630"><a href="#cb39-630" aria-hidden="true" tabindex="-1"></a>textarea</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-10-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-10-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="date" class="level3">
+<h3 class="anchored" data-anchor-id="date">👉 date</h3>
+<div class="sourceCode" id="cb40"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>viewof date <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">date</span>()</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>date</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41" data-startfrom="641" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 640;"><span id="cb41-641"><a href="#cb41-641" aria-hidden="true" tabindex="-1"></a>viewof date <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">date</span>()</span>
+<span id="cb41-642"><a href="#cb41-642" aria-hidden="true" tabindex="-1"></a>date</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-11-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-11-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="color" class="level3">
+<h3 class="anchored" data-anchor-id="color">👉 color</h3>
+<div class="sourceCode" id="cb42"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>viewof pickcolor <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"cor preferida"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"#4682b4"</span>})</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>pickcolor</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43" data-startfrom="653" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 652;"><span id="cb43-653"><a href="#cb43-653" aria-hidden="true" tabindex="-1"></a>viewof pickcolor <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"cor preferida"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"#4682b4"</span>})</span>
+<span id="cb43-654"><a href="#cb43-654" aria-hidden="true" tabindex="-1"></a>pickcolor</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-12-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-12-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="file" class="level3">
+<h3 class="anchored" data-anchor-id="file">👉 file</h3>
+<div class="sourceCode" id="cb44"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>viewof file <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">file</span>()</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>file</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45" data-startfrom="665" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 664;"><span id="cb45-665"><a href="#cb45-665" aria-hidden="true" tabindex="-1"></a>viewof file <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">file</span>()</span>
+<span id="cb45-666"><a href="#cb45-666" aria-hidden="true" tabindex="-1"></a>file</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-13-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="formulário" class="level3">
+<h3 class="anchored" data-anchor-id="formulário">👉 formulário</h3>
+</section>
+</section>
+<section id="tudo-é-reativo" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="tudo-é-reativo"><span class="header-section-number">2.8</span> Tudo é reativo 🔥</h2>
+<p>Com Observable, graças à relação topológica entre as células, tudo é reativo. Sempre que se move algo, tudo o que depende desse movimento é reexecutado.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>viewof age <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">15</span><span class="op">,</span> <span class="dv">70</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"age"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span>})</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>viewof name <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"name"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"João"</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47" data-startfrom="682" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 681;"><span id="cb47-682"><a href="#cb47-682" aria-hidden="true" tabindex="-1"></a>viewof age <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">15</span><span class="op">,</span> <span class="dv">70</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"age"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">30</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span>})</span>
+<span id="cb47-683"><a href="#cb47-683" aria-hidden="true" tabindex="-1"></a>viewof name <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">text</span>({<span class="dt">label</span><span class="op">:</span> <span class="st">"name"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"João"</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-14-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-14-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>Por exemplo</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`O meu nome é **</span><span class="sc">${</span>name<span class="sc">}</span><span class="vs">** e tenho **</span><span class="sc">${</span>age<span class="sc">}</span><span class="vs">** anos :-)`</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49" data-startfrom="692" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 691;"><span id="cb49-692"><a href="#cb49-692" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`O meu nome é **</span><span class="sc">${</span>name<span class="sc">}</span><span class="vs">** e tenho **</span><span class="sc">${</span>age<span class="sc">}</span><span class="vs">** anos :-)`</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Voltamos ao exemplo SVG de há pouco:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">500</span><span class="op">,</span> <span class="dv">60</span>])</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background-color"</span><span class="op">,</span> <span class="st">"#CCC"</span>)<span class="op">;</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  svg</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cx"</span><span class="op">,</span> <span class="dv">50</span>)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cy"</span><span class="op">,</span> <span class="dv">30</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"r"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#e04a28"</span>)<span class="op">;</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51" data-startfrom="716" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 715;"><span id="cb51-716"><a href="#cb51-716" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb51-717"><a href="#cb51-717" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3</span>
+<span id="cb51-718"><a href="#cb51-718" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb51-719"><a href="#cb51-719" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">500</span><span class="op">,</span> <span class="dv">60</span>])</span>
+<span id="cb51-720"><a href="#cb51-720" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background-color"</span><span class="op">,</span> <span class="st">"#CCC"</span>)<span class="op">;</span></span>
+<span id="cb51-721"><a href="#cb51-721" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-722"><a href="#cb51-722" aria-hidden="true" tabindex="-1"></a>  svg</span>
+<span id="cb51-723"><a href="#cb51-723" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb51-724"><a href="#cb51-724" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cx"</span><span class="op">,</span> <span class="dv">50</span>)</span>
+<span id="cb51-725"><a href="#cb51-725" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"cy"</span><span class="op">,</span> <span class="dv">30</span>)</span>
+<span id="cb51-726"><a href="#cb51-726" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"r"</span><span class="op">,</span> <span class="dv">25</span>)</span>
+<span id="cb51-727"><a href="#cb51-727" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#e04a28"</span>)<span class="op">;</span></span>
+<span id="cb51-728"><a href="#cb51-728" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb51-729"><a href="#cb51-729" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb51-730"><a href="#cb51-730" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-16" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>O utilizador poderia facilmente modificar o desenho, substituindo valores por variáveis controladas por entradas. Por exemplo:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>viewof cx <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">30</span><span class="op">,</span> <span class="dv">470</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"posicao"</span>})</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>viewof col <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({ <span class="dt">value</span><span class="op">:</span> <span class="st">"#e04a28"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"cor"</span>})</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>viewof r <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">5</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">25</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"raio"</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53" data-startfrom="744" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 743;"><span id="cb53-744"><a href="#cb53-744" aria-hidden="true" tabindex="-1"></a>viewof cx <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">30</span><span class="op">,</span> <span class="dv">470</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"posicao"</span>})</span>
+<span id="cb53-745"><a href="#cb53-745" aria-hidden="true" tabindex="-1"></a>viewof col <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">color</span>({ <span class="dt">value</span><span class="op">:</span> <span class="st">"#e04a28"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"cor"</span>})</span>
+<span id="cb53-746"><a href="#cb53-746" aria-hidden="true" tabindex="-1"></a>viewof r <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">5</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">25</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"raio"</span>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-17-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="os-dados" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="os-dados"><span class="header-section-number">2.9</span> Os dados</h2>
+<p>Os dados são adicionados utilizando a instrução <code>FileAttachment()</code></p>
+<section id="ficheiro-csv" class="level3">
+<h3 class="anchored" data-anchor-id="ficheiro-csv">👉 ficheiro csv</h3>
+<div class="sourceCode" id="cb54"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/afrika_data.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55" data-startfrom="759" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 758;"><span id="cb55-759"><a href="#cb55-759" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/afrika_data.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-18" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>Os dados são importados e convertidos automaticamente para o formato json</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56" data-startfrom="765" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 764;"><span id="cb56-765"><a href="#cb56-765" aria-hidden="true" tabindex="-1"></a>data1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-19" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Para os visualizar, utilize-se a instrução <code>Inputs.table()</code></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(data1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58" data-startfrom="775" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 774;"><span id="cb58-775"><a href="#cb58-775" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(data1)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-20" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="ficheiro-xlsx" class="level3">
+<h3 class="anchored" data-anchor-id="ficheiro-xlsx">👉 ficheiro xlsx</h3>
+<p>Também é possível importar ficheiros Excel</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>classeur <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/afrika.xlsx"</span>)<span class="op">.</span><span class="fu">xlsx</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60" data-startfrom="787" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 786;"><span id="cb60-787"><a href="#cb60-787" aria-hidden="true" tabindex="-1"></a>classeur <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/afrika.xlsx"</span>)<span class="op">.</span><span class="fu">xlsx</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-21" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61" data-startfrom="791" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 790;"><span id="cb61-791"><a href="#cb61-791" aria-hidden="true" tabindex="-1"></a>classeur</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-22" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Temos acesso à lista das folhas assim:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>classeur<span class="op">.</span><span class="at">sheetNames</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63" data-startfrom="801" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 800;"><span id="cb63-801"><a href="#cb63-801" aria-hidden="true" tabindex="-1"></a>classeur<span class="op">.</span><span class="at">sheetNames</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-23" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Depois, podemos escolher a folha a abrir</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> classeur<span class="op">.</span><span class="fu">sheet</span>(<span class="st">"data"</span><span class="op">,</span> {</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">headers</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65" data-startfrom="813" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 812;"><span id="cb65-813"><a href="#cb65-813" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> classeur<span class="op">.</span><span class="fu">sheet</span>(<span class="st">"data"</span><span class="op">,</span> {</span>
+<span id="cb65-814"><a href="#cb65-814" aria-hidden="true" tabindex="-1"></a>  <span class="dt">headers</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb65-815"><a href="#cb65-815" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-24" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66" data-startfrom="819" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 818;"><span id="cb66-819"><a href="#cb66-819" aria-hidden="true" tabindex="-1"></a>data2</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-25" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="apresentação-dos-dados" class="level3">
+<h3 class="anchored" data-anchor-id="apresentação-dos-dados">👉 Apresentação dos dados</h3>
+<p>Os dados podem ser formatados utilizando JavaScript puro.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>subdata1 <span class="op">=</span> data1</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>((d) <span class="kw">=&gt;</span> <span class="op">+</span>d<span class="op">.</span><span class="at">ESPVIE</span> <span class="op">&gt;</span> <span class="dv">65</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">map</span>((d) <span class="kw">=&gt;</span> ({ <span class="dt">code</span><span class="op">:</span> d<span class="op">.</span><span class="at">iso3</span><span class="op">,</span> <span class="dt">nom</span><span class="op">:</span> d<span class="op">.</span><span class="at">nom</span><span class="op">,</span> <span class="dt">POP</span><span class="op">:</span> d<span class="op">.</span><span class="at">POP</span><span class="op">,</span> <span class="dt">PIB</span><span class="op">:</span> d<span class="op">.</span><span class="at">PIB</span><span class="op">,</span> <span class="dt">ESPVIE</span><span class="op">:</span> d<span class="op">.</span><span class="at">ESPVIE</span> }))</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">sort</span>((a<span class="op">,</span> b) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">descending</span>(b<span class="op">.</span><span class="at">ESPVIE</span><span class="op">,</span> a<span class="op">.</span><span class="at">ESPVIE</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O resultado é o seguinte:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68" data-startfrom="836" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 835;"><span id="cb68-836"><a href="#cb68-836" aria-hidden="true" tabindex="-1"></a>subdata1 <span class="op">=</span> data1</span>
+<span id="cb68-837"><a href="#cb68-837" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>((d) <span class="kw">=&gt;</span> <span class="op">+</span>d<span class="op">.</span><span class="at">ESPVIE</span> <span class="op">&gt;</span> <span class="dv">65</span>)</span>
+<span id="cb68-838"><a href="#cb68-838" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">map</span>((d) <span class="kw">=&gt;</span> ({ <span class="dt">code</span><span class="op">:</span> d<span class="op">.</span><span class="at">iso3</span><span class="op">,</span> <span class="dt">nom</span><span class="op">:</span> d<span class="op">.</span><span class="at">nom</span><span class="op">,</span> <span class="dt">POP</span><span class="op">:</span> d<span class="op">.</span><span class="at">POP</span><span class="op">,</span> <span class="dt">PIB</span><span class="op">:</span> d<span class="op">.</span><span class="at">PIB</span><span class="op">,</span> <span class="dt">ESPVIE</span><span class="op">:</span> d<span class="op">.</span><span class="at">ESPVIE</span> }))</span>
+<span id="cb68-839"><a href="#cb68-839" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">sort</span>((a<span class="op">,</span> b) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">descending</span>(b<span class="op">.</span><span class="at">ESPVIE</span><span class="op">,</span> a<span class="op">.</span><span class="at">ESPVIE</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-26" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69" data-startfrom="843" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 842;"><span id="cb69-843"><a href="#cb69-843" aria-hidden="true" tabindex="-1"></a>subdata1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-27" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Pode-se também utilizar <code>arquero</code>. Ver : <a href="https://observablehq.com/@observablehq/data-wrangler">https://observablehq.com/@observablehq/data-wrangler</a>.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>subdata2 <span class="op">=</span> aq</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">from</span>(data1)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>((d) <span class="kw">=&gt;</span> d[<span class="st">"ESPVIE"</span>] <span class="op">&gt;</span> <span class="dv">65</span>)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">rename</span>({ <span class="dt">iso3</span><span class="op">:</span> <span class="st">"code"</span> })</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">"code"</span><span class="op">,</span> <span class="st">"nom"</span><span class="op">,</span> <span class="st">"POP"</span><span class="op">,</span> <span class="st">"PIB"</span><span class="op">,</span> <span class="st">"ESPVIE"</span>)</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">orderby</span>(<span class="st">"ESPVIE"</span>)</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">objects</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71" data-startfrom="860" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 859;"><span id="cb71-860"><a href="#cb71-860" aria-hidden="true" tabindex="-1"></a>subdata2 <span class="op">=</span> aq</span>
+<span id="cb71-861"><a href="#cb71-861" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">from</span>(data1)</span>
+<span id="cb71-862"><a href="#cb71-862" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>((d) <span class="kw">=&gt;</span> d[<span class="st">"ESPVIE"</span>] <span class="op">&gt;</span> <span class="dv">65</span>)</span>
+<span id="cb71-863"><a href="#cb71-863" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">rename</span>({ <span class="dt">iso3</span><span class="op">:</span> <span class="st">"code"</span> })</span>
+<span id="cb71-864"><a href="#cb71-864" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">"code"</span><span class="op">,</span> <span class="st">"nom"</span><span class="op">,</span> <span class="st">"POP"</span><span class="op">,</span> <span class="st">"PIB"</span><span class="op">,</span> <span class="st">"ESPVIE"</span>)</span>
+<span id="cb71-865"><a href="#cb71-865" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">orderby</span>(<span class="st">"ESPVIE"</span>)</span>
+<span id="cb71-866"><a href="#cb71-866" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">objects</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-28" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>O resultado é o mesmo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72" data-startfrom="872" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 871;"><span id="cb72-872"><a href="#cb72-872" aria-hidden="true" tabindex="-1"></a>subdata2</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-29" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</section>
+<section id="ficheiro-geojson" class="level3">
+<h3 class="anchored" data-anchor-id="ficheiro-geojson">👉 ficheiro geoJSON</h3>
+<p>Para utilizar geometrias, deve ser utilizado prioritariamente o formato geoJSON.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>basemap <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/africa.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74" data-startfrom="884" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 883;"><span id="cb74-884"><a href="#cb74-884" aria-hidden="true" tabindex="-1"></a>basemap <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"data/africa.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-30" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75" data-startfrom="888" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 887;"><span id="cb75-888"><a href="#cb75-888" aria-hidden="true" tabindex="-1"></a>basemap</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-31" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>Aqui está a estrutura de um geoJSON</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Object</span> {<span class="dt">type</span><span class="op">:</span> <span class="st">"FeatureCollection"</span><span class="op">,</span> <span class="dt">name</span><span class="op">:</span> <span class="st">"world"</span><span class="op">,</span> <span class="dt">features</span><span class="op">:</span> <span class="bu">Array</span>(<span class="dv">50</span>)}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>E eis o que aparece se o mostrarmos (veremos como mais tarde…)</p>
+</section>
+</section>
+<section id="bibliotecas-externas" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="bibliotecas-externas"><span class="header-section-number">2.10</span> Bibliotecas externas</h2>
+<p>O javascript observável não é um ecossistema fechado. Existem milhões de bibliotecas javascript no NPM (o equivalente ao CRAN para o R). É possível usá-las.</p>
+<p><img src="img/npm-cli.png" class="img-fluid"></p>
+<p>Aqui, podemos importá-los diretamente utilizando a instrução <code>require()</code></p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>geo <span class="op">=</span> <span class="pp">require</span>(<span class="st">"geotoolbox"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78" data-startfrom="914" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 913;"><span id="cb78-914"><a href="#cb78-914" aria-hidden="true" tabindex="-1"></a>geo <span class="op">=</span> <span class="pp">require</span>(<span class="st">"geotoolbox"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-32" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p>Generalização de mapas</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>viewof k <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.01</span><span class="op">,</span> <span class="fl">0.5</span>]<span class="op">,</span> { <span class="dt">label</span><span class="op">:</span> <span class="st">"k"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">0.05</span> })</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>geo<span class="op">.</span><span class="fu">simplify</span>(world<span class="op">,</span> { k })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80" data-startfrom="926" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 925;"><span id="cb80-926"><a href="#cb80-926" aria-hidden="true" tabindex="-1"></a>viewof k <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.01</span><span class="op">,</span> <span class="fl">0.5</span>]<span class="op">,</span> { <span class="dt">label</span><span class="op">:</span> <span class="st">"k"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">0.05</span> })</span>
+<span id="cb80-927"><a href="#cb80-927" aria-hidden="true" tabindex="-1"></a>geo<span class="op">.</span><span class="fu">simplify</span>(world<span class="op">,</span> { k })</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-33-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-33-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="importações" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="importações"><span class="header-section-number">2.11</span> Importações</h2>
+<p>Como dissemos anteriormente, o Observable é também uma plataforma web que aloja blocos de notas.</p>
+<p><img src="img/observable-maps.png" class="img-fluid"></p>
+<p>Se tiver uma ligação à Internet, pode importar qualquer célula de qualquer caderno utilizando a função <code>import</code>. Por outras palavras, todos os blocos de notas alojados em <em>observablehq.com</em> funcionam como api.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {SankeyChart} <span class="im">from</span> <span class="st">"@d3/sankey"</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {energy} <span class="im">from</span> <span class="st">"@d3/sankey"</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82" data-startfrom="945" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 944;"><span id="cb82-945"><a href="#cb82-945" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {SankeyChart} <span class="im">from</span> <span class="st">"@d3/sankey"</span></span>
+<span id="cb82-946"><a href="#cb82-946" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {energy} <span class="im">from</span> <span class="st">"@d3/sankey"</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-34-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-34-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<p>A seguir, pode-se utilizar esta função.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> <span class="fu">SankeyChart</span>({</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">links</span><span class="op">:</span> energy</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span> {</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">nodeGroup</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">id</span><span class="op">.</span><span class="fu">split</span>(<span class="ss">/</span><span class="sc">\W</span><span class="ss">/</span>)[<span class="dv">0</span>]<span class="op">,</span> <span class="co">// take first word for color</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>  width<span class="op">,</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span></span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84" data-startfrom="961" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 960;"><span id="cb84-961"><a href="#cb84-961" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> <span class="fu">SankeyChart</span>({</span>
+<span id="cb84-962"><a href="#cb84-962" aria-hidden="true" tabindex="-1"></a>  <span class="dt">links</span><span class="op">:</span> energy</span>
+<span id="cb84-963"><a href="#cb84-963" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span> {</span>
+<span id="cb84-964"><a href="#cb84-964" aria-hidden="true" tabindex="-1"></a>  <span class="dt">nodeGroup</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">id</span><span class="op">.</span><span class="fu">split</span>(<span class="ss">/</span><span class="sc">\W</span><span class="ss">/</span>)[<span class="dv">0</span>]<span class="op">,</span> <span class="co">// take first word for color</span></span>
+<span id="cb84-965"><a href="#cb84-965" aria-hidden="true" tabindex="-1"></a>  width<span class="op">,</span></span>
+<span id="cb84-966"><a href="#cb84-966" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span></span>
+<span id="cb84-967"><a href="#cb84-967" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-35" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="trabalhos-práticos-lets-go" class="level1" data-background-color="#40666e" data-number="3">
+<h1 data-background-color="#40666e" data-number="3"><span class="header-section-number">3</span> Trabalhos práticos 👉 let’s go</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IntcbiAgY29uc3Qgc3ZnID0gZDNcbiAgICAuY3JlYXRlKFwic3ZnXCIpXG4gICAgLmF0dHIoXCJ2aWV3Qm94XCIsIFswLCAwLCA1MDAsIDYwXSlcbiAgICAuc3R5bGUoXCJiYWNrZ3JvdW5kLWNvbG9yXCIsIFwiI0NDQ1wiKTtcbiAgICBcbiAgc3ZnXG4gICAgLmFwcGVuZChcImNpcmNsZVwiKVxuICAgIC5hdHRyKFwiY3hcIiwgNTApXG4gICAgLmF0dHIoXCJjeVwiLCAzMClcbiAgICAuYXR0cihcInJcIiwgMjUpXG4gICAgLnN0eWxlKFwiZmlsbFwiLCBcIiNlMDRhMjhcIik7XG4gICAgXG4gIHJldHVybiBzdmcubm9kZSgpO1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoieyBsZXQgYSA9IFs3LDEsOSwzLDEwLDQsNSw2LDIsOF1cbnJldHVybiBhLnNvcnQoKVxufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGNsaWNrcyA9IElucHV0cy5idXR0b24oXCJDbGlja1wiKVxuY2xpY2tzXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgbXV0ZSA9IElucHV0cy50b2dnbGUoe2xhYmVsOiBcIk11dGVcIiwgdmFsdWU6IHRydWV9KVxubXV0ZVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC01IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGdhaW4gPSBJbnB1dHMucmFuZ2UoWzAsIDExXSwge3ZhbHVlOiA1LCBzdGVwOiAwLjEsIGxhYmVsOiBcIkdhaW5cIn0pXG5nYWluXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgY29sb3JzID0gSW5wdXRzLmNoZWNrYm94KFtcInJlZFwiLCBcImdyZWVuXCIsIFwiYmx1ZVwiXSwge2xhYmVsOiBcImNvbG9yXCJ9KVxuY29sb3JzXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTciLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgY29sb3IgPSBJbnB1dHMucmFkaW8oW1wicmVkXCIsIFwiZ3JlZW5cIiwgXCJibHVlXCJdLCB7bGFiZWw6IFwiY29sb3JcIn0pXG5jb2xvclxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC04IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiY2lkYWRlcyA9IFtcIkNvaW1icmFcIiwgXCJGYXJvXCIsIFwiQnJhZ2FcIl1cbnZpZXdvZiBtaW5oYWNpZGFkZSA9IElucHV0cy5zZWxlY3QoY2lkYWRlcywge3ZhbHVlOiBcInN0ZWVsYmx1ZVwiLCBsYWJlbDogXCJFc2NvbGhlIHVtYSBjaWRhZGVcIn0pXG5taW5oYWNpZGFkZVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC05IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHRleHQgPSBJbnB1dHMudGV4dCgpXG50ZXh0XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEwIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHRleHRhcmVhID0gSW5wdXRzLnRleHRhcmVhKClcbnRleHRhcmVhXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTExIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGRhdGUgPSBJbnB1dHMuZGF0ZSgpXG5kYXRlXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEyIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHBpY2tjb2xvciA9IElucHV0cy5jb2xvcih7bGFiZWw6IFwiY29yIHByZWZlcmlkYVwiLCB2YWx1ZTogXCIjNDY4MmI0XCJ9KVxucGlja2NvbG9yXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEzIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGZpbGUgPSBJbnB1dHMuZmlsZSgpXG5maWxlXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE0IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGFnZSA9IElucHV0cy5yYW5nZShbMTUsIDcwXSwge2xhYmVsOiBcImFnZVwiLCB2YWx1ZTogMzAsIHN0ZXA6IDEsfSlcbnZpZXdvZiBuYW1lID0gSW5wdXRzLnRleHQoe2xhYmVsOiBcIm5hbWVcIiwgdmFsdWU6IFwiSm/Do29cIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibWRgTyBtZXUgbm9tZSDDqSAqKiR7bmFtZX0qKiBlIHRlbmhvICoqJHthZ2V9KiogYW5vcyA6LSlgXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE2IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoie1xuICBjb25zdCBzdmcgPSBkM1xuICAgIC5jcmVhdGUoXCJzdmdcIilcbiAgICAuYXR0cihcInZpZXdCb3hcIiwgWzAsIDAsIDUwMCwgNjBdKVxuICAgIC5zdHlsZShcImJhY2tncm91bmQtY29sb3JcIiwgXCIjQ0NDXCIpO1xuICAgIFxuICBzdmdcbiAgICAuYXBwZW5kKFwiY2lyY2xlXCIpXG4gICAgLmF0dHIoXCJjeFwiLCA1MClcbiAgICAuYXR0cihcImN5XCIsIDMwKVxuICAgIC5hdHRyKFwiclwiLCAyNSlcbiAgICAuc3R5bGUoXCJmaWxsXCIsIFwiI2UwNGEyOFwiKTtcbiAgICBcbiAgcmV0dXJuIHN2Zy5ub2RlKCk7XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE3IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGN4ID0gSW5wdXRzLnJhbmdlKFszMCwgNDcwXSwge3ZhbHVlOiA1MCwgc3RlcDogMSwgbGFiZWw6IFwicG9zaWNhb1wifSlcbnZpZXdvZiBjb2wgPSBJbnB1dHMuY29sb3IoeyB2YWx1ZTogXCIjZTA0YTI4XCIsIGxhYmVsOiBcImNvclwifSlcbnZpZXdvZiByID0gSW5wdXRzLnJhbmdlKFs1LCAzMF0sIHt2YWx1ZTogMjUsIHN0ZXA6IDAuMSwgbGFiZWw6IFwicmFpb1wifSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTgiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhMSA9IEZpbGVBdHRhY2htZW50KFwiZGF0YS9hZnJpa2FfZGF0YS5jc3ZcIikuY3N2KClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTkiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhMVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yMCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IklucHV0cy50YWJsZShkYXRhMSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjEiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjbGFzc2V1ciA9IEZpbGVBdHRhY2htZW50KFwiZGF0YS9hZnJpa2EueGxzeFwiKS54bHN4KClcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjbGFzc2V1clxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImNsYXNzZXVyLnNoZWV0TmFtZXNcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJkYXRhMiA9IGNsYXNzZXVyLnNoZWV0KFwiZGF0YVwiLCB7XG4gIGhlYWRlcnM6IHRydWVcbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI1IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiZGF0YTJcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjYiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJzdWJkYXRhMSA9IGRhdGExXG4gIC5maWx0ZXIoKGQpID0+ICtkLkVTUFZJRSA+IDY1KVxuICAubWFwKChkKSA9PiAoeyBjb2RlOiBkLmlzbzMsIG5vbTogZC5ub20sIFBPUDogZC5QT1AsIFBJQjogZC5QSUIsIEVTUFZJRTogZC5FU1BWSUUgfSkpXG4gIC5zb3J0KChhLCBiKSA9PiBkMy5kZXNjZW5kaW5nKGIuRVNQVklFLCBhLkVTUFZJRSkpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI3IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoic3ViZGF0YTFcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMjgiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJzdWJkYXRhMiA9IGFxXG4gIC5mcm9tKGRhdGExKVxuICAuZmlsdGVyKChkKSA9PiBkW1wiRVNQVklFXCJdID4gNjUpXG4gIC5yZW5hbWUoeyBpc28zOiBcImNvZGVcIiB9KVxuICAuc2VsZWN0KFwiY29kZVwiLCBcIm5vbVwiLCBcIlBPUFwiLCBcIlBJQlwiLCBcIkVTUFZJRVwiKVxuICAub3JkZXJieShcIkVTUFZJRVwiKVxuICAub2JqZWN0cygpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTI5IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoic3ViZGF0YTJcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzAiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJiYXNlbWFwID0gRmlsZUF0dGFjaG1lbnQoXCJkYXRhL2FmcmljYS5qc29uXCIpLmpzb24oKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6ImJhc2VtYXBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJnZW8gPSByZXF1aXJlKFwiZ2VvdG9vbGJveFwiKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBrID0gSW5wdXRzLnJhbmdlKFswLjAxLCAwLjVdLCB7IGxhYmVsOiBcImtcIiwgc3RlcDogMC4wMSwgdmFsdWU6IDAuMDUgfSlcbmdlby5zaW1wbGlmeSh3b3JsZCwgeyBrIH0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTM0IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaW1wb3J0IHtTYW5rZXlDaGFydH0gZnJvbSBcIkBkMy9zYW5rZXlcIlxuaW1wb3J0IHtlbmVyZ3l9IGZyb20gXCJAZDMvc2Fua2V5XCJcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMzUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJjaGFydCA9IFNhbmtleUNoYXJ0KHtcbiAgbGlua3M6IGVuZXJneVxufSwge1xuICBub2RlR3JvdXA6IGQgPT4gZC5pZC5zcGxpdCgvXFxXLylbMF0sIC8vIHRha2UgZmlyc3Qgd29yZCBmb3IgY29sb3JcbiAgd2lkdGgsXG4gIGhlaWdodDogNjAwXG59KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdjbGlja3MnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnbXV0ZScpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdnYWluJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2NvbG9ycycpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdjb2xvcicpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdtaW5oYWNpZGFkZScpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd0ZXh0JykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3RleHRhcmVhJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2RhdGUnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncGlja2NvbG9yJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2ZpbGUnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnYWdlJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ25hbWUnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnY3gnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnY29sJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3InKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnaycpIn1dfQ==
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
