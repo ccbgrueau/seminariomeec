@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Web Geográfica</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="seminario-mecc-sig-2024_files/libs/clipboard/clipboard.min.js"></script>
+<script src="seminario-mecc-sig-2024_files/libs/quarto-html/quarto.js"></script>
+<script src="seminario-mecc-sig-2024_files/libs/quarto-html/popper.min.js"></script>
+<script src="seminario-mecc-sig-2024_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="seminario-mecc-sig-2024_files/libs/quarto-html/anchor.min.js"></script>
+<link href="seminario-mecc-sig-2024_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="seminario-mecc-sig-2024_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="seminario-mecc-sig-2024_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="seminario-mecc-sig-2024_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="seminario-mecc-sig-2024_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#o-que-é-um-sig" id="toc-o-que-é-um-sig" class="nav-link active" data-scroll-target="#o-que-é-um-sig"><span class="header-section-number">1</span> O que é um SIG? 🌎️</a>
+  <ul class="collapse">
+  <li><a href="#projeção" id="toc-projeção" class="nav-link" data-scroll-target="#projeção"><span class="header-section-number">1.1</span> Projeção</a></li>
+  <li><a href="#projeção-mundial" id="toc-projeção-mundial" class="nav-link" data-scroll-target="#projeção-mundial"><span class="header-section-number">1.2</span> Projeção mundial</a></li>
+  <li><a href="#projeção-mundial-1" id="toc-projeção-mundial-1" class="nav-link" data-scroll-target="#projeção-mundial-1"><span class="header-section-number">1.3</span> Projeção mundial</a></li>
+  <li><a href="#distorção" id="toc-distorção" class="nav-link" data-scroll-target="#distorção"><span class="header-section-number">1.4</span> Distorção</a></li>
+  <li><a href="#projeção-local" id="toc-projeção-local" class="nav-link" data-scroll-target="#projeção-local"><span class="header-section-number">1.5</span> Projeção local</a></li>
+  <li><a href="#projeção-local-1" id="toc-projeção-local-1" class="nav-link" data-scroll-target="#projeção-local-1"><span class="header-section-number">1.6</span> Projeção local</a></li>
+  <li><a href="#projeção-local-2" id="toc-projeção-local-2" class="nav-link" data-scroll-target="#projeção-local-2"><span class="header-section-number">1.7</span> Projeção local</a></li>
+  <li><a href="#camadas" id="toc-camadas" class="nav-link" data-scroll-target="#camadas"><span class="header-section-number">1.8</span> Camadas 🔰</a></li>
+  <li><a href="#algumas-noções-básicas-para-a-criação-de-mapas" id="toc-algumas-noções-básicas-para-a-criação-de-mapas" class="nav-link" data-scroll-target="#algumas-noções-básicas-para-a-criação-de-mapas"><span class="header-section-number">1.9</span> Algumas noções básicas para a criação de mapas ️🧭</a></li>
+  <li><a href="#não-apenas-para-mapas-bonitos" id="toc-não-apenas-para-mapas-bonitos" class="nav-link" data-scroll-target="#não-apenas-para-mapas-bonitos"><span class="header-section-number">1.10</span> Não (apenas) para mapas bonitos…</a></li>
+  </ul></li>
+  <li><a href="#camadas-num-sig" id="toc-camadas-num-sig" class="nav-link" data-scroll-target="#camadas-num-sig"><span class="header-section-number">2</span> Camadas num SIG 🌎️</a>
+  <ul class="collapse">
+  <li><a href="#dois-tipos-principais-de-camadas" id="toc-dois-tipos-principais-de-camadas" class="nav-link" data-scroll-target="#dois-tipos-principais-de-camadas"><span class="header-section-number">2.1</span> Dois tipos principais de camadas</a></li>
+  <li><a href="#exemplos-de-dados-raster" id="toc-exemplos-de-dados-raster" class="nav-link" data-scroll-target="#exemplos-de-dados-raster"><span class="header-section-number">2.2</span> Exemplos de dados raster</a></li>
+  <li><a href="#exemplos-de-dados-raster-1" id="toc-exemplos-de-dados-raster-1" class="nav-link" data-scroll-target="#exemplos-de-dados-raster-1"><span class="header-section-number">2.3</span> Exemplos de dados raster</a>
+  <ul class="collapse">
+  <li><a href="#deteção-remota-imagens-multiespectrais" id="toc-deteção-remota-imagens-multiespectrais" class="nav-link" data-scroll-target="#deteção-remota-imagens-multiespectrais">Deteção remota: Imagens multiespectrais</a></li>
+  </ul></li>
+  <li><a href="#exemplos-de-dados-raster-2" id="toc-exemplos-de-dados-raster-2" class="nav-link" data-scroll-target="#exemplos-de-dados-raster-2"><span class="header-section-number">2.4</span> Exemplos de dados raster</a>
+  <ul class="collapse">
+  <li><a href="#deteção-remota-imagens-multiespectrais-1" id="toc-deteção-remota-imagens-multiespectrais-1" class="nav-link" data-scroll-target="#deteção-remota-imagens-multiespectrais-1">Deteção remota**: Imagens multiespectrais</a></li>
+  </ul></li>
+  <li><a href="#exemplos-de-dados-raster-3" id="toc-exemplos-de-dados-raster-3" class="nav-link" data-scroll-target="#exemplos-de-dados-raster-3"><span class="header-section-number">2.5</span> Exemplos de dados raster</a>
+  <ul class="collapse">
+  <li><a href="#modelo-digital-de-elevação-dem-dados-de-elevação" id="toc-modelo-digital-de-elevação-dem-dados-de-elevação" class="nav-link" data-scroll-target="#modelo-digital-de-elevação-dem-dados-de-elevação">Modelo Digital de Elevação (DEM): Dados de elevação</a></li>
+  </ul></li>
+  <li><a href="#exemplos-de-dados-raster-4" id="toc-exemplos-de-dados-raster-4" class="nav-link" data-scroll-target="#exemplos-de-dados-raster-4"><span class="header-section-number">2.6</span> Exemplos de dados raster</a>
+  <ul class="collapse">
+  <li><a href="#modelo-digital-de-terreno-mdt-dados-de-elevação" id="toc-modelo-digital-de-terreno-mdt-dados-de-elevação" class="nav-link" data-scroll-target="#modelo-digital-de-terreno-mdt-dados-de-elevação">Modelo Digital de Terreno (MDT): Dados de elevação</a></li>
+  </ul></li>
+  <li><a href="#formatos-de-camadas-raster" id="toc-formatos-de-camadas-raster" class="nav-link" data-scroll-target="#formatos-de-camadas-raster"><span class="header-section-number">2.7</span> Formatos de camadas raster</a></li>
+  <li><a href="#dois-tipos-principais-de-camadas-1" id="toc-dois-tipos-principais-de-camadas-1" class="nav-link" data-scroll-target="#dois-tipos-principais-de-camadas-1"><span class="header-section-number">2.8</span> Dois tipos principais de camadas</a></li>
+  <li><a href="#exemplos-de-dados-vetoriais" id="toc-exemplos-de-dados-vetoriais" class="nav-link" data-scroll-target="#exemplos-de-dados-vetoriais"><span class="header-section-number">2.9</span> Exemplos de dados vetoriais</a></li>
+  <li><a href="#exemplos-de-dados-vetoriais-1" id="toc-exemplos-de-dados-vetoriais-1" class="nav-link" data-scroll-target="#exemplos-de-dados-vetoriais-1"><span class="header-section-number">2.10</span> Exemplos de dados vetoriais</a></li>
+  <li><a href="#exemplos-de-dados-vetoriais-2" id="toc-exemplos-de-dados-vetoriais-2" class="nav-link" data-scroll-target="#exemplos-de-dados-vetoriais-2"><span class="header-section-number">2.11</span> Exemplos de dados vetoriais</a></li>
+  <li><a href="#exemplos-de-dados-vectoriais" id="toc-exemplos-de-dados-vectoriais" class="nav-link" data-scroll-target="#exemplos-de-dados-vectoriais"><span class="header-section-number">2.12</span> Exemplos de dados vectoriais</a></li>
+  <li><a href="#exemplos-de-dados-vectoriais-1" id="toc-exemplos-de-dados-vectoriais-1" class="nav-link" data-scroll-target="#exemplos-de-dados-vectoriais-1"><span class="header-section-number">2.13</span> Exemplos de dados vectoriais</a></li>
+  <li><a href="#formatos-de-camadas-vectoriais" id="toc-formatos-de-camadas-vectoriais" class="nav-link" data-scroll-target="#formatos-de-camadas-vectoriais"><span class="header-section-number">2.14</span> Formatos de camadas vectoriais</a></li>
+  </ul></li>
+  <li><a href="#alguns-exemplos-de-software-gis" id="toc-alguns-exemplos-de-software-gis" class="nav-link" data-scroll-target="#alguns-exemplos-de-software-gis"><span class="header-section-number">3</span> Alguns exemplos de software GIS 🌎️</a>
+  <ul class="collapse">
+  <li><a href="#softwares-especializados" id="toc-softwares-especializados" class="nav-link" data-scroll-target="#softwares-especializados"><span class="header-section-number">3.1</span> Softwares especializados</a></li>
+  <li><a href="#softwares-não-especializados" id="toc-softwares-não-especializados" class="nav-link" data-scroll-target="#softwares-não-especializados"><span class="header-section-number">3.2</span> Softwares não especializados</a></li>
+  <li><a href="#softwares-baseados-na-nuvem" id="toc-softwares-baseados-na-nuvem" class="nav-link" data-scroll-target="#softwares-baseados-na-nuvem"><span class="header-section-number">3.3</span> Softwares baseados na nuvem</a></li>
+  </ul></li>
+  <li><a href="#um-exemplo-de-aplicação-sig-na-web" id="toc-um-exemplo-de-aplicação-sig-na-web" class="nav-link" data-scroll-target="#um-exemplo-de-aplicação-sig-na-web"><span class="header-section-number">4</span> Um exemplo de aplicação SIG na Web 🌎️</a>
+  <ul class="collapse">
+  <li><a href="#sistemas-de-abastecimento-de-água" id="toc-sistemas-de-abastecimento-de-água" class="nav-link" data-scroll-target="#sistemas-de-abastecimento-de-água"><span class="header-section-number">4.1</span> Sistemas de Abastecimento de Água</a></li>
+  <li><a href="#sistemas-de-informação-nos-serviços-de-abastecimento-de-água" id="toc-sistemas-de-informação-nos-serviços-de-abastecimento-de-água" class="nav-link" data-scroll-target="#sistemas-de-informação-nos-serviços-de-abastecimento-de-água"><span class="header-section-number">4.2</span> Sistemas de Informação nos Serviços de Abastecimento de Água</a></li>
+  <li><a href="#perguntas-de-investigação" id="toc-perguntas-de-investigação" class="nav-link" data-scroll-target="#perguntas-de-investigação"><span class="header-section-number">4.3</span> Perguntas de investigação</a></li>
+  <li><a href="#parceiros" id="toc-parceiros" class="nav-link" data-scroll-target="#parceiros"><span class="header-section-number">4.4</span> Parceiros</a>
+  <ul class="collapse">
+  <li><a href="#infraquinta---quinta-do-lago" id="toc-infraquinta---quinta-do-lago" class="nav-link" data-scroll-target="#infraquinta---quinta-do-lago">InfraQuinta - Quinta do Lago</a></li>
+  </ul></li>
+  <li><a href="#serviços-de-abastecimento-de-água" id="toc-serviços-de-abastecimento-de-água" class="nav-link" data-scroll-target="#serviços-de-abastecimento-de-água"><span class="header-section-number">4.5</span> Serviços de Abastecimento de Água</a>
+  <ul class="collapse">
+  <li><a href="#rural-vs-urbano-cm-de-reguengos-de-monsaraz-vs-cm-do-barreiro" id="toc-rural-vs-urbano-cm-de-reguengos-de-monsaraz-vs-cm-do-barreiro" class="nav-link" data-scroll-target="#rural-vs-urbano-cm-de-reguengos-de-monsaraz-vs-cm-do-barreiro">Rural VS Urbano: CM de Reguengos de Monsaraz vs CM do Barreiro</a></li>
+  </ul></li>
+  <li><a href="#os-serviços-de-abastecimento-de-água-não-são-uniformes" id="toc-os-serviços-de-abastecimento-de-água-não-são-uniformes" class="nav-link" data-scroll-target="#os-serviços-de-abastecimento-de-água-não-são-uniformes"><span class="header-section-number">4.6</span> Os Serviços de Abastecimento de Água não são uniformes</a></li>
+  <li><a href="#inquérito-nacional" id="toc-inquérito-nacional" class="nav-link" data-scroll-target="#inquérito-nacional"><span class="header-section-number">4.7</span> Inquérito Nacional</a>
+  <ul class="collapse">
+  <li><a href="#município-do-barreiro" id="toc-município-do-barreiro" class="nav-link" data-scroll-target="#município-do-barreiro">Município do Barreiro</a></li>
+  </ul></li>
+  <li><a href="#uma-plataforma-cloud-integrada" id="toc-uma-plataforma-cloud-integrada" class="nav-link" data-scroll-target="#uma-plataforma-cloud-integrada"><span class="header-section-number">4.8</span> Uma Plataforma Cloud Integrada</a>
+  <ul class="collapse">
+  <li><a href="#desenvolvimento-de-caixas-de-ferramentas-para-avaliar-o-sistema-de-água-e-ajudar-na-tomada-de-decisões." id="toc-desenvolvimento-de-caixas-de-ferramentas-para-avaliar-o-sistema-de-água-e-ajudar-na-tomada-de-decisões." class="nav-link" data-scroll-target="#desenvolvimento-de-caixas-de-ferramentas-para-avaliar-o-sistema-de-água-e-ajudar-na-tomada-de-decisões.">Desenvolvimento de caixas de ferramentas para avaliar o sistema de água e ajudar na tomada de decisões.</a></li>
+  </ul></li>
+  <li><a href="#modelação-do-domínio" id="toc-modelação-do-domínio" class="nav-link" data-scroll-target="#modelação-do-domínio"><span class="header-section-number">4.9</span> Modelação do Domínio</a></li>
+  <li><a href="#arquitectura-da-plataforma" id="toc-arquitectura-da-plataforma" class="nav-link" data-scroll-target="#arquitectura-da-plataforma"><span class="header-section-number">4.10</span> Arquitectura da Plataforma</a></li>
+  <li><a href="#carregamento-da-informação" id="toc-carregamento-da-informação" class="nav-link" data-scroll-target="#carregamento-da-informação"><span class="header-section-number">4.11</span> Carregamento da Informação</a></li>
+  <li><a href="#dashboard-cliente" id="toc-dashboard-cliente" class="nav-link" data-scroll-target="#dashboard-cliente"><span class="header-section-number">4.12</span> Dashboard cliente</a></li>
+  <li><a href="#resultados" id="toc-resultados" class="nav-link" data-scroll-target="#resultados"><span class="header-section-number">4.13</span> Resultados</a></li>
+  <li><a href="#mais-alguns-exemplos" id="toc-mais-alguns-exemplos" class="nav-link" data-scroll-target="#mais-alguns-exemplos"><span class="header-section-number">4.14</span> Mais alguns exemplos</a></li>
+  </ul></li>
+  <li><a href="#web-gis" id="toc-web-gis" class="nav-link" data-scroll-target="#web-gis"><span class="header-section-number">5</span> Web GIS 🌎️</a>
+  <ul class="collapse">
+  <li><a href="#estacionamento-nas-cidades" id="toc-estacionamento-nas-cidades" class="nav-link" data-scroll-target="#estacionamento-nas-cidades"><span class="header-section-number">5.1</span> Estacionamento nas cidades</a>
+  <ul class="collapse">
+  <li><a href="#map-seety" id="toc-map-seety" class="nav-link" data-scroll-target="#map-seety">Map Seety</a></li>
+  </ul></li>
+  <li><a href="#potencial-de-paneis-solares-em-telhado" id="toc-potencial-de-paneis-solares-em-telhado" class="nav-link" data-scroll-target="#potencial-de-paneis-solares-em-telhado"><span class="header-section-number">5.2</span> Potencial de paneis solares em telhado</a></li>
+  <li><a href="#recursos-úteis" id="toc-recursos-úteis" class="nav-link" data-scroll-target="#recursos-úteis"><span class="header-section-number">5.3</span> Recursos úteis</a></li>
+  <li><a href="#outros-recursos" id="toc-outros-recursos" class="nav-link" data-scroll-target="#outros-recursos"><span class="header-section-number">5.4</span> Outros recursos</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Web Geográfica</h1>
+<p class="subtitle lead">Aplicações para a análise espacial</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="o-que-é-um-sig" class="level1" data-background-color="#40666e" data-number="1">
+<h1 data-background-color="#40666e" data-number="1"><span class="header-section-number">1</span> O que é um SIG? 🌎️</h1>
+<p>Um sistema informático para analisar e visualizar dados espaciais</p>
+<section id="projeção" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="projeção"><span class="header-section-number">1.1</span> Projeção</h2>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Projeção
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Uma superfície esférica 3D não pode ser convertida num mapa 2D sem distorções</p>
+</div>
+</div>
+<ul>
+<li>Tal como tentar achatar a pele de uma laranja (P)</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/goode.jpg" class="img-fluid figure-img"></p>
+<figcaption>Picture: Manson and Kernik</figcaption>
+</figure>
+</div>
+<ul>
+<li>É igualmente necessário refletir o relevo da superfície da Terra</li>
+</ul>
+</section>
+<section id="projeção-mundial" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="projeção-mundial"><span class="header-section-number">1.2</span> Projeção mundial</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<section id="projeção-mercator" class="level3">
+<h3 class="anchored" data-anchor-id="projeção-mercator">Projeção Mercator</h3>
+<p>A deformação aumenta com as latitudes, sendo a Gronelândia e a Antárctida muito maiores do que a realidade</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/mercator.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:60%;">
+<section id="waterman-borboleta" class="level3">
+<h3 class="anchored" data-anchor-id="waterman-borboleta">Waterman “borboleta”</h3>
+<p>Uma das projecções com menos distorção</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/waterman.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div>
+</div>
+<p>Pictures: Wikipedia</p>
+</section>
+<section id="projeção-mundial-1" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="projeção-mundial-1"><span class="header-section-number">1.3</span> Projeção mundial</h2>
+<ul>
+<li>Comparação da matriz de deformação de Tissot</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:40%;">
+<section id="projeção-mercator-1" class="level3">
+<h3 class="anchored" data-anchor-id="projeção-mercator-1">Projeção Mercator</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/mercator_tissot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:60%;">
+<section id="waterman-borboleta-1" class="level3">
+<h3 class="anchored" data-anchor-id="waterman-borboleta-1">Waterman “borboleta”</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/waterman_tissot.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div>
+</div>
+<p>Pictures: Wikipedia</p>
+</section>
+<section id="distorção" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="distorção"><span class="header-section-number">1.4</span> Distorção</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/africa.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div><div class="column" style="width:40%;">
+<p><img src="img/carto-distance-1.png" class="img-fluid quarto-figure quarto-figure-center"> <img src="img/carto-distance-2.png" class="img-fluid quarto-figure quarto-figure-center"></p>
+</div>
+</div>
+</section>
+<section id="projeção-local" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="projeção-local"><span class="header-section-number">1.5</span> Projeção local</h2>
+<p>Utilização de projecções locais para reduzir as distorções</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/local_noname.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="projeção-local-1" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="projeção-local-1"><span class="header-section-number">1.6</span> Projeção local</h2>
+<p>Utilização de projecções locais para reduzir as distorções</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/local.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="projeção-local-2" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="projeção-local-2"><span class="header-section-number">1.7</span> Projeção local</h2>
+<p>Utilização de projeções locais para reduzir as distorções</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/dt73.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="camadas" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="camadas"><span class="header-section-number">1.8</span> Camadas 🔰</h2>
+<p>Com o SIG, os mapas são constituídos por uma sobreposição de camadas.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/map_creation.gif" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="algumas-noções-básicas-para-a-criação-de-mapas" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="algumas-noções-básicas-para-a-criação-de-mapas"><span class="header-section-number">1.9</span> Algumas noções básicas para a criação de mapas ️🧭</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/final_map.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div><div class="column" style="width:60%;">
+<ul>
+<li><p>Fornecer algum contexto (fronteiras municipais, cursos de água…)</p></li>
+<li><p>Pode utilizar um pequeno mapa para localizar a sua área de estudo a uma escala maior</p></li>
+<li><p>Os mapas precisam de legenda, barra de escala e seta para norte</p></li>
+<li><p>Adicionar título, de preferência com um comentário</p></li>
+<li><p>Não se esqueça de citar a fonte de dados</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="não-apenas-para-mapas-bonitos" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="não-apenas-para-mapas-bonitos"><span class="header-section-number">1.10</span> Não (apenas) para mapas bonitos…</h2>
+<p>Podem ser efectuadas várias operações de geoprocessamento para uma única camada ou entre camadas</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/app_gis.gif" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="camadas-num-sig" class="level1" data-background-color="#40666e" data-number="2">
+<h1 data-background-color="#40666e" data-number="2"><span class="header-section-number">2</span> Camadas num SIG 🌎️</h1>
+<section id="dois-tipos-principais-de-camadas" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="dois-tipos-principais-de-camadas"><span class="header-section-number">2.1</span> Dois tipos principais de camadas</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="raster" class="level3">
+<h3 class="anchored" data-anchor-id="raster">Raster</h3>
+<ul>
+<li>Grelha regular de células ou pixéis</li>
+<li>Um ou vários valores por célula</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/raster.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:50%;">
+
+</div>
+</div>
+</section>
+<section id="exemplos-de-dados-raster" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="exemplos-de-dados-raster"><span class="header-section-number">2.2</span> Exemplos de dados raster</h2>
+<ul>
+<li><strong>Fotografia aérea</strong>: Os valores dos pixels correspondem à cor do solo</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/aerial.png" class="img-fluid figure-img"></p>
+<figcaption>Comparação de Lempdes (63) entre a atualidade e 1950</figcaption>
+</figure>
+</div>
+<p>Fonte: <a href="https://remonterletemps.ign.fr/">remonterletemps.ign.fr</a></p>
+</section>
+<section id="exemplos-de-dados-raster-1" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="exemplos-de-dados-raster-1"><span class="header-section-number">2.3</span> Exemplos de dados raster</h2>
+<section id="deteção-remota-imagens-multiespectrais" class="level3">
+<h3 class="anchored" data-anchor-id="deteção-remota-imagens-multiespectrais">Deteção remota: Imagens multiespectrais</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Três resultados para a radiação solar recebida: absorção, reflexão ou transmissão</li>
+</ul>
+<p>Para cada comprimento de onda, a reflectância (<span class="math inline">\(R\)</span>) é calculada da seguinte forma <span class="math inline">\(R = ϕr /ϕi\)</span></p>
+</div><div class="column" style="width:50%;">
+<p><img src="img/rad.png" class="img-fluid quarto-figure quarto-figure-center"> Dinâmica do fluxo luminoso que chega a uma folha</p>
+</div>
+</div>
+</section>
+</section>
+<section id="exemplos-de-dados-raster-2" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="exemplos-de-dados-raster-2"><span class="header-section-number">2.4</span> Exemplos de dados raster</h2>
+<section id="deteção-remota-imagens-multiespectrais-1" class="level3">
+<h3 class="anchored" data-anchor-id="deteção-remota-imagens-multiespectrais-1">Deteção remota**: Imagens multiespectrais</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Vários satélites fornecem dados de reflectância com uma resolução de 10 a 30 m, como o Landsat ou o Sentinel-2</p></li>
+<li><p>Cada raster pode ser processado isoladamente ou combinado como um índice de vegetação, como o Índice de Vegetação por Diferença Normalizada ou Normalized Difference Vegetation Index (NDVI)</p></li>
+</ul>
+<p><span class="math inline">\(NDVI = ϕr /ϕi\)</span></p>
+</div><div class="column" style="width:50%;">
+<p><img src="img/NDVI.gif" class="img-fluid quarto-figure quarto-figure-center"> Time lapse da evolução do NDVI</p>
+</div>
+</div>
+</section>
+</section>
+<section id="exemplos-de-dados-raster-3" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="exemplos-de-dados-raster-3"><span class="header-section-number">2.5</span> Exemplos de dados raster</h2>
+<section id="modelo-digital-de-elevação-dem-dados-de-elevação" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-digital-de-elevação-dem-dados-de-elevação">Modelo Digital de Elevação (DEM): Dados de elevação</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<blockquote class="blockquote">
+<p>Um DEM é um raster da topografia da superfície do solo</p>
+</blockquote>
+<ul>
+<li>Cada célula indica a elevação média numa determinada posição</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/elevation.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="exemplos-de-dados-raster-4" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="exemplos-de-dados-raster-4"><span class="header-section-number">2.6</span> Exemplos de dados raster</h2>
+<section id="modelo-digital-de-terreno-mdt-dados-de-elevação" class="level3">
+<h3 class="anchored" data-anchor-id="modelo-digital-de-terreno-mdt-dados-de-elevação">Modelo Digital de Terreno (MDT): Dados de elevação</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Um MDT é um raster da topografia da superfície do solo</p></li>
+<li><p>O SIG pode converter estes dados em raster de declive, exposição…</p>
+<ul>
+<li>À direita: Cada célula apresenta a exposição principal numa determinada posição</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/aspect.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="formatos-de-camadas-raster" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="formatos-de-camadas-raster"><span class="header-section-number">2.7</span> Formatos de camadas raster</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os ficheiros geográficos raster são como ficheiros de imagem</p>
+</div>
+</div>
+<ul>
+<li><p>Assim, o formato de um ficheiro raster é frequentemente o de um ficheiro de imagem (.tif, .ecw, .jpg, .png…)</p></li>
+<li><p>Mas, para além dos dados de imagem, os ficheiros raster têm <span class="bg" style="--col: #e6ffe6"><strong>informação de posicionamento</strong></span>, que podem ser armazenadas num ficheiro separado ou no mesmo ficheiro num formato GeoTIFF (.tif ou .tiff)</p></li>
+</ul>
+</section>
+<section id="dois-tipos-principais-de-camadas-1" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="dois-tipos-principais-de-camadas-1"><span class="header-section-number">2.8</span> Dois tipos principais de camadas</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="raster-1" class="level3">
+<h3 class="anchored" data-anchor-id="raster-1">Raster</h3>
+<ul>
+<li>Grelha regular de células ou pixéis</li>
+<li>Um ou vários valores por célula</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/raster.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:50%;">
+<section id="vetor" class="level3">
+<h3 class="anchored" data-anchor-id="vetor">Vetor</h3>
+<ul>
+<li>Conjunto de formas geométricas (pontos, rectas ou polígonos)</li>
+<li>Com uma tabela de atributos que descreve cada elemento <img src="img/vectors.png" class="img-fluid quarto-figure quarto-figure-center"></li>
+</ul>
+</section>
+</div>
+</div>
+</section>
+<section id="exemplos-de-dados-vetoriais" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="exemplos-de-dados-vetoriais"><span class="header-section-number">2.9</span> Exemplos de dados vetoriais</h2>
+<p>Com os vetores, as entidades espaciais elementares não são células mas formas geométricas: [<strong>pontos, linhas ou polígonos</strong>]{.bg style=“–col: #e6ffe6”}</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/type.gif" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="exemplos-de-dados-vetoriais-1" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="exemplos-de-dados-vetoriais-1"><span class="header-section-number">2.10</span> Exemplos de dados vetoriais</h2>
+<p>As variáveis de diferentes tipos (numéricas, factoriais, texto…) podem ser armazenadas na <strong>tabela de atributos</strong> para definir cada item</p>
+<p>Uma tabela por ficheiro vetorial, com uma linha por item</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Município</th>
+<th>Código postal</th>
+<th>População</th>
+<th>Área (km2)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Almada</td>
+<td>2800</td>
+<td>177400</td>
+<td>13,98</td>
+</tr>
+<tr class="even">
+<td>Moita</td>
+<td>2860</td>
+<td>66262</td>
+<td>55,26</td>
+</tr>
+<tr class="odd">
+<td>Sesimbra</td>
+<td>2970</td>
+<td>52394</td>
+<td>195,47</td>
+</tr>
+<tr class="even">
+<td>Seixal</td>
+<td>2840</td>
+<td>1666525</td>
+<td>95,5</td>
+</tr>
+<tr class="odd">
+<td>Setúbal</td>
+<td>2900</td>
+<td>123519</td>
+<td>51,42</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="exemplos-de-dados-vetoriais-2" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="exemplos-de-dados-vetoriais-2"><span class="header-section-number">2.11</span> Exemplos de dados vetoriais</h2>
+<ul>
+<li>Os vetores são úteis para elaborar mapas coropléticos, nos quais as unidades espaciais são coloridas ou sombreadas para indicar os valores médios de um indicador</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Primeiro mapa coroplético: <a href="https://gallica.bnf.fr/ark:/12148/btv1b530830640">Educação popular em França</a> (Dupin, 1826)</p>
+<p>Legenda: De 1 aluno por 10 habitantes a 1 aluno por 268 habitantes, do mais claro ao mais escuro</p>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/chloro.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exemplos-de-dados-vectoriais" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="exemplos-de-dados-vectoriais"><span class="header-section-number">2.12</span> Exemplos de dados vectoriais</h2>
+<ul>
+<li>Os mapas coropléticos são adequados para mostrar valores estatísticos por entidade administrativa</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/cattle.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>## Exemplos de dados vetoriais</p>
+<ul>
+<li>O princípio dos mapas coropléticos pode também ser aplicado a vetores pontuais</li>
+<li>Para produzir um mapa de rendimento, a tabela de atributos fornece o peso estimado, a humidade, a largura de trabalho…</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/yield.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="exemplos-de-dados-vectoriais-1" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="exemplos-de-dados-vectoriais-1"><span class="header-section-number">2.13</span> Exemplos de dados vectoriais</h2>
+<p>Num cartograma, é o tamanho das entidades que é proporcional ao indicador cartografado</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/cartogram.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="formatos-de-camadas-vectoriais" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="formatos-de-camadas-vectoriais"><span class="header-section-number">2.14</span> Formatos de camadas vectoriais</h2>
+<p>Existem vários formatos para ficheiros vectoriais</p>
+<ul>
+<li><p><em>GeoJSON (.geojson, .json), GeoPackage (.gpkg), .kml e .kmz</em>… O formato shapefile é um formato popular de dados vetoriais desenvolvido e regulado pela Esri</p></li>
+<li><p>Cada shapefile é composto por vários ficheiros</p>
+<ul>
+<li><em>.shp, .shx, .dbf (table of attribute), .prj (optional file with CRS)</em>…</li>
+<li>Todos os ficheiros devem ser guardados na mesma pasta, com o mesmo nome</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="alguns-exemplos-de-software-gis" class="level1" data-background-color="#40666e" data-number="3">
+<h1 data-background-color="#40666e" data-number="3"><span class="header-section-number">3</span> Alguns exemplos de software GIS 🌎️</h1>
+<section id="softwares-especializados" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="softwares-especializados"><span class="header-section-number">3.1</span> Softwares especializados</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="gratuito-fonte-aberta" class="level3">
+<h3 class="anchored" data-anchor-id="gratuito-fonte-aberta">Gratuito, fonte aberta</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/qgis.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:50%;">
+<section id="comercial" class="level3">
+<h3 class="anchored" data-anchor-id="comercial">Comercial</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/arcgis.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+</div>
+</div>
+</section>
+<section id="softwares-não-especializados" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="softwares-não-especializados"><span class="header-section-number">3.2</span> Softwares não especializados</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/r_ex.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+<section id="softwares-baseados-na-nuvem" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="softwares-baseados-na-nuvem"><span class="header-section-number">3.3</span> Softwares baseados na nuvem</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/gee2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="um-exemplo-de-aplicação-sig-na-web" class="level1" data-background-color="#40666e" data-number="4">
+<h1 data-background-color="#40666e" data-number="4"><span class="header-section-number">4</span> Um exemplo de aplicação SIG na Web 🌎️</h1>
+<section id="sistemas-de-abastecimento-de-água" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sistemas-de-abastecimento-de-água"><span class="header-section-number">4.1</span> Sistemas de Abastecimento de Água</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<section id="rede-de-distribuição-de-água-na-cidade-de-lisboa-2016" class="level3">
+<h3 class="anchored" data-anchor-id="rede-de-distribuição-de-água-na-cidade-de-lisboa-2016">Rede de Distribuição de Água na Cidade de Lisboa (2016):</h3>
+<ul>
+<li>1448 km de condutas;</li>
+<li>86.000 ramais de abastecimento;</li>
+<li>9500 análises à qualidade da água;</li>
+<li>10.000 operações;</li>
+<li>Cerca de 300 000 contratos.</li>
+<li>…</li>
+</ul>
+</section>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/lisbon-network.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="notes">
+<p>Physical network composed of pipes, pumps, valves that needs operations and manutentaion vast dataset: cadastral; accounting and billing; operation and maintenance; energy consumption associated with volumes supplied to the system prediction, modeling and analysis models.</p>
+</div>
+</section>
+<section id="sistemas-de-informação-nos-serviços-de-abastecimento-de-água" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sistemas-de-informação-nos-serviços-de-abastecimento-de-água"><span class="header-section-number">4.2</span> Sistemas de Informação nos Serviços de Abastecimento de Água</h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<section id="sig" class="level3">
+<h3 class="anchored" data-anchor-id="sig">SIG</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/agua-sig.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:35%;">
+<section id="telemetria" class="level3">
+<h3 class="anchored" data-anchor-id="telemetria">Telemetria</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/agua-telemetria.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div><div class="column" style="width:30%;">
+<section id="telemetria-1" class="level3">
+<h3 class="anchored" data-anchor-id="telemetria-1">Telemetria</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/agua-clientes.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</div>
+</div>
+<div class="notes">
+<p>geographic information systems (GIS); ERP systems (“Enterprise Resource Planning”); customer management systems; accounting support systems; telemetering and remote management (SCADA) systems. Billing Systems Operation and manutention</p>
+</div>
+</section>
+<section id="perguntas-de-investigação" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="perguntas-de-investigação"><span class="header-section-number">4.3</span> Perguntas de investigação</h2>
+<ol type="1">
+<li><p>como é que as empresas de abastecimento de água <strong>gerem a sua informação e tomam decisões de gestão</strong>?</p></li>
+<li><p>Como é que a agência pública nacional avalia a gestão das empresas de abastecimento de água</p></li>
+<li><p>… A fim de melhorar o conhecimento que as empresas de abastecimento de água têm das suas infra-estruturas hídricas</p></li>
+</ol>
+</section>
+<section id="parceiros" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="parceiros"><span class="header-section-number">4.4</span> Parceiros</h2>
+<section id="infraquinta---quinta-do-lago" class="level3">
+<h3 class="anchored" data-anchor-id="infraquinta---quinta-do-lago">InfraQuinta - Quinta do Lago</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/infra-quinta.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="notes">
+<p>The degree of maturity of the utilities in Portugal is quite different, explained by different management models, geographical context and financial capacity.</p>
+</div>
+</section>
+</section>
+<section id="serviços-de-abastecimento-de-água" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="serviços-de-abastecimento-de-água"><span class="header-section-number">4.5</span> Serviços de Abastecimento de Água</h2>
+<section id="rural-vs-urbano-cm-de-reguengos-de-monsaraz-vs-cm-do-barreiro" class="level3">
+<h3 class="anchored" data-anchor-id="rural-vs-urbano-cm-de-reguengos-de-monsaraz-vs-cm-do-barreiro">Rural VS Urbano: CM de Reguengos de Monsaraz vs CM do Barreiro</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/rural-vs-urbano.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="os-serviços-de-abastecimento-de-água-não-são-uniformes" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="os-serviços-de-abastecimento-de-água-não-são-uniformes"><span class="header-section-number">4.6</span> Os Serviços de Abastecimento de Água não são uniformes</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-parceiros.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="notes">
+<p>Reasons: Few clientes -&gt; few resources When manage by municipalities, water facility is only one of the other services</p>
+</div>
+</section>
+<section id="inquérito-nacional" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="inquérito-nacional"><span class="header-section-number">4.7</span> Inquérito Nacional</h2>
+<section id="município-do-barreiro" class="level3">
+<h3 class="anchored" data-anchor-id="município-do-barreiro">Município do Barreiro</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-barreiro.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="notes">
+<p>The data are dispersed by different IS, and there is a need to resort to several actors to extract and process these data.</p>
+<p>EG engineering technicians must have a platform that aggregates the different data dispersed by the different ISs, in order to obtain the best possible knowledge of the infrastructures they manage.</p>
+</div>
+</section>
+</section>
+<section id="uma-plataforma-cloud-integrada" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="uma-plataforma-cloud-integrada"><span class="header-section-number">4.8</span> Uma Plataforma Cloud Integrada</h2>
+<section id="desenvolvimento-de-caixas-de-ferramentas-para-avaliar-o-sistema-de-água-e-ajudar-na-tomada-de-decisões." class="level3">
+<h3 class="anchored" data-anchor-id="desenvolvimento-de-caixas-de-ferramentas-para-avaliar-o-sistema-de-água-e-ajudar-na-tomada-de-decisões.">Desenvolvimento de caixas de ferramentas para avaliar o sistema de água e ajudar na tomada de decisões.</h3>
+<div class="columns">
+<div class="column" style="width:70%;">
+<ul>
+<li>16 Métricas para medir a saúde do sistema
+<ul>
+<li>Avarias nas condutas</li>
+<li>Água não facturada</li>
+<li>Perdas de água</li>
+<li>…</li>
+</ul></li>
+<li>Módulo de representação geográfica;
+<ul>
+<li>Módulo de simulação hidráulica;</li>
+<li>Balanço hídrico</li>
+<li>Balanço energético</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="modelação-do-domínio" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="modelação-do-domínio"><span class="header-section-number">4.9</span> Modelação do Domínio</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-model.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="arquitectura-da-plataforma" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="arquitectura-da-plataforma"><span class="header-section-number">4.10</span> Arquitectura da Plataforma</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-arquitetura.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="carregamento-da-informação" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="carregamento-da-informação"><span class="header-section-number">4.11</span> Carregamento da Informação</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-data-upload.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="dashboard-cliente" class="level2" data-number="4.12">
+<h2 data-number="4.12" class="anchored" data-anchor-id="dashboard-cliente"><span class="header-section-number">4.12</span> Dashboard cliente</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/decide-dashboard.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="resultados" class="level2" data-number="4.13">
+<h2 data-number="4.13" class="anchored" data-anchor-id="resultados"><span class="header-section-number">4.13</span> Resultados</h2>
+<ul>
+<li><p>API Pública Com 16 Métricas sobre os Sistemas das Empresas de Água</p></li>
+<li><p>plataforma Na Nuvem</p>
+<ul>
+<li>para Importar Dados em Formato Standard</li>
+<li>visualização De Informações e Métricas</li>
+</ul></li>
+<li><p>Boas Práticas De Gestão Da Informação</p></li>
+<li><p><em>Grueau, Cédric; Antunes, André; Ferreira, Bruno; Gonçalves, Miguel; Gomes, João; Carriço, Nelson. “Towards an Integrated Platform for Decision Support in Water Utility Management”. in Proceedings of 12th IADIS International Conference on Information Systems, Utrecht, 2019. DOI: 10.33965/is2019_201905c00</em></p></li>
+</ul>
+</section>
+<section id="mais-alguns-exemplos" class="level2" data-number="4.14">
+<h2 data-number="4.14" class="anchored" data-anchor-id="mais-alguns-exemplos"><span class="header-section-number">4.14</span> Mais alguns exemplos</h2>
+<ul>
+<li>Potencial de painéis solares</li>
+<li>Avaliação do tráfego</li>
+<li>Gestão de frotas</li>
+</ul>
+</section>
+</section>
+<section id="web-gis" class="level1" data-background-color="#40666e" data-number="5">
+<h1 data-background-color="#40666e" data-number="5"><span class="header-section-number">5</span> Web GIS 🌎️</h1>
+<p>Aplicações Web com características SIG</p>
+<section id="estacionamento-nas-cidades" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="estacionamento-nas-cidades"><span class="header-section-number">5.1</span> Estacionamento nas cidades</h2>
+<section id="map-seety" class="level3">
+<h3 class="anchored" data-anchor-id="map-seety"><a href="https://map.seety.co/">Map Seety</a></h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/map-seety.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+</section>
+<section id="potencial-de-paneis-solares-em-telhado" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="potencial-de-paneis-solares-em-telhado"><span class="header-section-number">5.2</span> Potencial de paneis solares em telhado</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/SolarRoofPotential.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/SolarRoofPotential2.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="https://felt.com/map/Rooftop-Solar-Potential-MJ39CP9BRETdaJQgKgddwT6C?lat=38.034842&amp;lon=-78.47692&amp;zoom=16.54">https://felt.com/map/Rooftop-Solar-Potential</a></p>
+</section>
+<section id="recursos-úteis" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="recursos-úteis"><span class="header-section-number">5.3</span> Recursos úteis</h2>
+<ul>
+<li><p><a href="https://r-graph-gallery.com/cartogram.html">Learn how to make cartogram with R</a>, The R Graph Gallery</p></li>
+<li><p><a href="https://bjnnowak.github.io/Lessons/2nd_session_R#1">Making maps with R</a>, Benjamin Nowak</p></li>
+<li><p><a href="https://bjnnowak.netlify.app/2021/09/27/gee-terrain-features/">Handling Digital Elevation Model with Google Earth Engine</a>, Benjamin Nowak</p></li>
+</ul>
+</section>
+<section id="outros-recursos" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="outros-recursos"><span class="header-section-number">5.4</span> Outros recursos</h2>
+<ul>
+<li><a href="https://www.synopsys.com/glossary/what-is-lidar.html">What is LiDAR and How Does it Work? | Synopsys</a></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
