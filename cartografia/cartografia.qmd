@@ -1,0 +1,280 @@
+---
+title: Uma breve história da cartografia temática
+subtitle: Introdução à cartografia e à visualização de dados
+format:
+  clean-revealjs: 
+    slide-number: true
+    #smaller: true
+    scrollable: true
+    chalkboard: 
+      buttons: true
+    footer: <MEEC 2023-24>
+author:
+  - name: Cédric Grueau
+    orcid: 0000-0003-3445-4070
+    email: cedric.grueau@estsetubal.ips.pt
+    affiliations: Escola Superior de Tecnologia de Setúbal
+date: last-modified
+lang: pt
+editor: 
+  markdown: 
+    wrap: sentence
+---
+
+## Os primeiros mapas
+
+::: columns
+::: {.column width="50%"}
+![](img/cadastro-italiano.jpeg){fig-align="center"}
+
+O "Cadastro" de Bedolina (descoberto no norte de Itália) 2000 anos A.C.
+Pelo menos quatro períodos de gravura estão sobrepostos, e esta misteriosa topografia aparece na segunda camada, ao lado de representações de veados.
+Se este é, de facto, o primeiro vocabulário topográfico, não sabemos como o ler.
+:::
+
+::: {.column width="50%"}
+![](img/mapa-polinesio.jpeg){fig-align="center"}
+
+Estes mapas polinésios, conhecidos como Rebbelibs, Medosou ou Mattangs, representam as correntes marítimas e a direção da ondulação, perturbada pela presença de ilhas, utilizando varas de madeira dobradas, com conchas que representam a posição das ilhas.
+Datam do ano 1000 a.C.
+:::
+:::
+
+## Aperfeiçoamento das representações do mundo
+
+![](img/lambert2019.png)
+
+Lambert, N., Zanin C.
+(2019).
+Mad Maps - L’Atlas qui va changer votre vision du monde (p. 144p).
+Armand Colin.
+
+## Os primórdios da dataviz
+
+**Nicole Oresme** (1370) foi um dos primeiros a conceber o princípio e a utilidade das coordenadas cartesianas para a representação gráfica de fenómenos quantitativos.
+
+::: columns
+::: {.column width="40%"}
+![](img/oresme.png){fig-align="center"}
+:::
+
+::: {.column width="60%"}
+![](img/oresme2.png){fig-align="center"}
+:::
+:::
+
+## Os primórdios da dataviz
+
+### William Playfair (1786) Atlas comercial e político
+
+::: columns
+::: {.column width="50%"}
+. ![](img/playfair.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+![](img/playfair2.png){fig-align="center"}
+:::
+:::
+
+## Os primórdios da dataviz
+
+### Florence Nightingale\*\* (1857)
+
+#### Notes on Matters Affecting the Health, Efficiency and Hospital Administration of the British Army.
+
+![](img/nightingsale.png)
+
+## O encontro de 2 mundos
+
+Quando a cartografia encontra a visualização de dados estatísticos
+
+::: columns
+::: {.column width="40%"}
+Mapa figurativo da educação popular em França (Charles Dupin, 1826)
+
+![](img/dupin1926.png)
+:::
+
+::: {.column width="60%"}
+Frère de Montizon (1830)
+
+![](img/montizon1830.png)
+
+Emile Cheysson (1886)
+
+![](img/cheysson1826.png)
+:::
+:::
+
+## O Golden Standard da dataviz
+
+### **Charles Joseph Minard** (1869)
+
+![Mapa figurativo das perdas sucessivas em homens do exército francês na campanha russa de 1812-1813.](img/russie1812.png)
+
+::: notes
+Em 1869, Minard retratou as perdas colossais sofridas pelo exército francês na campanha russa do início do século XIX.
+Este famoso "mapa figurativo" conta a história deste exército, que chegou a Moscovo com menos de um quarto das suas forças iniciais, para ser novamente dizimado na viagem de regresso.
+:::
+
+## Bertin, 1967 (e 1973)
+
+-   Enorme quantidade de trabalho de síntese.
+
+-   Abordagem bastante pragmática.
+
+-   Para o papel.
+
+-   A preto e branco.
+
+-   Mas um trabalho que continua a ser central para todos os que trabalham com visualização de dados atualmente.
+
+![](img/variaveis.png)
+
+## Leaflet, 2010
+
+#### https://leafletjs.com/
+
+![](img/leaflet.jpeg)
+
+## [Shan Carter](http://shancarter.com/), 2012
+
+#### (D3.js - Mike Bostock)
+
+https://archive.nytimes.com/www.nytimes.com/interactive/2012/02/13/us/politics/2013-budget-proposal-graphic.html
+
+![](img/newyorktimes.png)
+
+## Deck.gl, 2015
+
+##### https://deck.gl/
+
+![](img/deck-gl.png)
+
+## KeplerGL, 2018
+
+#### https://kepler.gl/
+
+![](img/kepler-gl.png)
+
+## Vega-lite, 2013
+
+#### https://vega.github.io/
+
+![](img/vega-lite.png)
+
+## Observable Plot, 2022
+
+#### https://github.com/observablehq/plot
+
+![](img/observable-plots.png)
+
+## Bertin, 2022
+
+#### https://github.com/neocarto/bertin
+
+![](img/bertin-js.png)
+
+## Semiologia gráfica
+
+A natureza dos dados determina o tipo de representação.
+
+![](img/semio-dados-mapa.png)
+
+## Variáveis de diferenciação visual
+
+### Dados qualitativos nominais
+
+![](img/semio-tipos-variaveis.png)
+
+## Variáveis visuais de ordem
+
+### Dados qualitativos ordinais e dados quantitativos relativos
+
+![](img/semio-eficiencia.png)
+
+## Variáveis de proporcionalidade visual
+
+### Dados de stock
+
+![](img/semio-ordem.png)
+
+## A regra básica a ter em conta!
+
+⚠️ Não há stock plano
+
+::: columns
+::: {.column width="50%"}
+![](img/semio-reter.png)
+:::
+
+::: {.column width="50%"}
+![](img/semio-reter2.png)
+:::
+:::
+
+## O Software
+
+Existe uma vasta gama de software que podem ser utilizados para criar mapas ou para ajudar a fazê-lo.
+Software SVG, software de cartografia por clique de botão, software de linha de comandos, software CAD, etc.
+
+![](img/software.png)
+
+## Criar mapas com R
+
+Desde a aquisição de dados até ao mapa final, utilizamos geralmente uma variedade de software, tanto gratuito como proprietário.
+Quanto mais software se utiliza, mais se quebra a cadeia de processamento.
+
+![](img/cadeia-processamento.png)
+
+## Criar mapas com R
+
+Com o R, procuramos minimizar estas interrupções de software, reunindo toda a cadeia de processamento num único ecossistema.
+
+![](img/cadeia-software.png)
+
+## Notebooks
+
+::: callout-tip
+## Integração
+
+permite-nos documentar o nosso trabalho e tornar os nossos mapas reproduzíveis.
+
+**Dados + código + ambiente de execução + publicação**
+:::
+
+![](img/fluxo-r.png)
+
+Os blocos de notas observáveis são documentos interactivos e editáveis definidos por código.
+Nos blocos de notas, pode combinar texto formatado (em Markdown), código (JavaScript, SQL, HTML) e resultados (por exemplo, tabelas de dados e visualizações personalizadas) e, a seguir, partilhar o seu trabalho com colegas de equipa e stakeholders.
+
+## Visualização de dados geográficos 2.0
+### Dashboards
+
+-   [U.S. electricity grid](https://observablehq.observablehq.cloud/framework-example-eia/)
+
+-   [Modality - a strategic mapping tool to analyze, simulate and coordinate multimodal mobility.](https://demo.with-modality.com/en/tutorial/0/)
+
+-   [24h of air traffic](https://24h-global-air-traffic.cbergillos.com/#1.87/30.85/70.49)
+
+-   [Charging points for electric vehicles in Paris / Nicolas Lambert \| Observable (observablehq.com)](https://observablehq.com/@neocartocnrs/charging-points-for-electric-vehicles-in-paris)
+
+## Mapas interativos
+
+### <https://www.chronotrains.com/it>
+
+![](../videos/acessibility.mp4){fig-align="center"}
+
+## Referências diversas
+
+### Empresas 
+-   [Create your IoT application without a single line of code (mapify.ai)](https://www.mapify.ai/)
+-   [TRACKiT \| Soluções de Mobilidade com localizador GPS](https://www.trackit.pt/)
+
+
+
+### API
+
+-   [eoAPI](https://developmentseed.org/blog/2023-07-17-say-hello-eoapi)
+-   [MapBox](https://www.mapbox.com/)
